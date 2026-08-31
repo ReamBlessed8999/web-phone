@@ -2,10 +2,329 @@
    products.js — Product Catalog, Stock Badges & Buy Now Popup
    ============================================================ */
 
+const INITIAL_PRODUCTS = [
+  // --- APPLE PHONES (5) ---
+  {
+    id: "p101",
+    brand: "Apple",
+    model: "iPhone 16 Pro Max",
+    category: "Smartphones",
+    stock: 12,
+    isNew: true,
+    isFeatured: true,
+    rating: 4.9,
+    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&auto=format&fit=crop",
+    colors: ["Natural Titanium", "Black Titanium", "White Titanium"],
+    storageOptions: [
+      { size: "256GB", price: 1199, was: 1299 },
+      { size: "512GB", price: 1399, was: 1499 }
+    ]
+  },
+  {
+    id: "p102",
+    brand: "Apple",
+    model: "iPhone 15 Pro Max",
+    category: "Smartphones",
+    stock: 8,
+    isNew: false,
+    isFeatured: true,
+    rating: 4.8,
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop",
+    colors: ["Natural Titanium", "Blue Titanium"],
+    storageOptions: [
+      { size: "256GB", price: 1099, was: 1199 }
+    ]
+  },
+  {
+    id: "p103",
+    brand: "Apple",
+    model: "iPhone 15",
+    category: "Smartphones",
+    stock: 15,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&auto=format&fit=crop",
+    colors: ["Pink", "Yellow", "Black"],
+    storageOptions: [
+      { size: "128GB", price: 799, was: 899 }
+    ]
+  },
+  {
+    id: "p104",
+    brand: "Apple",
+    model: "iPhone 14 Pro",
+    category: "Smartphones",
+    stock: 6,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.6,
+    image: "https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?w=500&auto=format&fit=crop",
+    colors: ["Deep Purple", "Gold", "Space Black"],
+    storageOptions: [
+      { size: "128GB", price: 699, was: 799 }
+    ]
+  },
+  {
+    id: "p105",
+    brand: "Apple",
+    model: "iPhone SE (3rd Gen)",
+    category: "Smartphones",
+    stock: 10,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.5,
+    image: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=500&auto=format&fit=crop",
+    colors: ["Midnight", "Starlight", "Red"],
+    storageOptions: [
+      { size: "64GB", price: 429, was: 479 }
+    ]
+  },
+
+  // --- SAMSUNG PHONES (5) ---
+  {
+    id: "p106",
+    brand: "Samsung",
+    model: "Galaxy S24 Ultra",
+    category: "Smartphones",
+    stock: 14,
+    isNew: true,
+    isFeatured: true,
+    rating: 4.9,
+    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&auto=format&fit=crop",
+    colors: ["Titanium Gray", "Titanium Black"],
+    storageOptions: [
+      { size: "256GB", price: 1299, was: 1399 }
+    ]
+  },
+  {
+    id: "p107",
+    brand: "Samsung",
+    model: "Galaxy Z Fold 6",
+    category: "Smartphones",
+    stock: 4,
+    isNew: true,
+    isFeatured: true,
+    rating: 4.8,
+    image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500&auto=format&fit=crop",
+    colors: ["Navy", "Silver Shadow"],
+    storageOptions: [
+      { size: "256GB", price: 1799, was: 1899 }
+    ]
+  },
+  {
+    id: "p108",
+    brand: "Samsung",
+    model: "Galaxy Z Flip 6",
+    category: "Smartphones",
+    stock: 0,
+    isNew: true,
+    isFeatured: false,
+    rating: 4.5,
+    image: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=500&auto=format&fit=crop",
+    colors: ["Blue", "Mint"],
+    storageOptions: [
+      { size: "256GB", price: 999, was: 1099 }
+    ]
+  },
+  {
+    id: "p109",
+    brand: "Samsung",
+    model: "Galaxy S23 FE",
+    category: "Smartphones",
+    stock: 11,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.6,
+    image: "https://images.unsplash.com/photo-1533228876829-65c94e7b5025?w=500&auto=format&fit=crop",
+    colors: ["Mint", "Graphite", "Purple"],
+    storageOptions: [
+      { size: "128GB", price: 599, was: 649 }
+    ]
+  },
+  {
+    id: "p110",
+    brand: "Samsung",
+    model: "Galaxy A55 5G",
+    category: "Smartphones",
+    stock: 20,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.5,
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop",
+    colors: ["Awesome Iceblue", "Awesome Navy"],
+    storageOptions: [
+      { size: "128GB", price: 449, was: 499 }
+    ]
+  },
+
+  // --- OPPO PHONES (5) ---
+  {
+    id: "p111",
+    brand: "Oppo",
+    model: "Find X7 Ultra",
+    category: "Smartphones",
+    stock: 0,
+    isNew: true,
+    isFeatured: true,
+    rating: 4.8,
+    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop",
+    colors: ["Ocean Blue", "Sepia Brown", "Tailored Black"],
+    storageOptions: [
+      { size: "256GB", price: 950, was: 1100 }
+    ]
+  },
+  {
+    id: "p112",
+    brand: "Oppo",
+    model: "Find N3 Fold",
+    category: "Smartphones",
+    stock: 5,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=500&auto=format&fit=crop",
+    colors: ["Champagne Gold", "Classic Black"],
+    storageOptions: [
+      { size: "512GB", price: 1499, was: 1699 }
+    ]
+  },
+  {
+    id: "p113",
+    brand: "Oppo",
+    model: "Reno 12 Pro",
+    category: "Smartphones",
+    stock: 18,
+    isNew: true,
+    isFeatured: false,
+    rating: 4.6,
+    image: "https://images.unsplash.com/photo-1567581935884-3349723552ca?w=500&auto=format&fit=crop",
+    colors: ["Nebula Silver", "Space Brown"],
+    storageOptions: [
+      { size: "256GB", price: 549, was: 599 }
+    ]
+  },
+  {
+    id: "p114",
+    brand: "Oppo",
+    model: "Reno 11 5G",
+    category: "Smartphones",
+    stock: 20,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.4,
+    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&auto=format&fit=crop",
+    colors: ["Wave Green", "Rock Grey"],
+    storageOptions: [
+      { size: "256GB", price: 399, was: 449 }
+    ]
+  },
+  {
+    id: "p115",
+    brand: "Oppo",
+    model: "A98 5G",
+    category: "Smartphones",
+    stock: 12,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.3,
+    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&auto=format&fit=crop",
+    colors: ["Dreamy Blue", "Cool Black"],
+    storageOptions: [
+      { size: "256GB", price: 299, was: 349 }
+    ]
+  },
+
+  // --- HUAWEI PHONES (5) ---
+  {
+    id: "p116",
+    brand: "Huawei",
+    model: "Huawei Pura 70 Pro",
+    category: "Smartphones",
+    stock: 5,
+    isNew: true,
+    isFeatured: true,
+    rating: 4.8,
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop",
+    colors: ["Roland Purple", "Snow White", "Feather Black"],
+    storageOptions: [
+      { size: "512GB", price: 999, was: 1199 }
+    ]
+  },
+  {
+    id: "p117",
+    brand: "Huawei",
+    model: "Mate 60 Pro",
+    category: "Smartphones",
+    stock: 7,
+    isNew: false,
+    isFeatured: true,
+    rating: 4.9,
+    image: "https://images.unsplash.com/photo-1567581935884-3349723552ca?w=500&auto=format&fit=crop",
+    colors: ["Green", "Silver", "Purple", "Black"],
+    storageOptions: [
+      { size: "512GB", price: 1099, was: 1249 }
+    ]
+  },
+  {
+    id: "p118",
+    brand: "Huawei",
+    model: "Mate X5 Fold",
+    category: "Smartphones",
+    stock: 2,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500&auto=format&fit=crop",
+    colors: ["Feather Red", "Feather White"],
+    storageOptions: [
+      { size: "512GB", price: 1799, was: 1999 }
+    ]
+  },
+  {
+    id: "p119",
+    brand: "Huawei",
+    model: "Nova 12 SE",
+    category: "Smartphones",
+    stock: 16,
+    isNew: true,
+    isFeatured: false,
+    rating: 4.4,
+    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&auto=format&fit=crop",
+    colors: ["Emerald Green", "Black"],
+    storageOptions: [
+      { size: "256GB", price: 349, was: 399 }
+    ]
+  },
+  {
+    id: "p120",
+    brand: "Huawei",
+    model: "P60 Pro",
+    category: "Smartphones",
+    stock: 9,
+    isNew: false,
+    isFeatured: false,
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&auto=format&fit=crop",
+    colors: ["Rococo Pearl", "Black"],
+    storageOptions: [
+      { size: "256GB", price: 899, was: 999 }
+    ]
+  }
+];
+
 const PLACEHOLDER_IMG = 'https://placehold.co/400x400/f4f0e4/a9781e?text=No+Image';
 let catalogState = { query: '', category: 'All', brand: 'All' };
 
-function loadProducts() { return lsGet(LS_KEYS.PRODUCTS, []); }
+function loadProducts() {
+  let products = lsGet(LS_KEYS.PRODUCTS, null);
+  if (!products || !products.length) {
+    products = INITIAL_PRODUCTS;
+    saveProducts(products);
+  }
+  return products;
+}
+
 function saveProducts(products) { lsSet(LS_KEYS.PRODUCTS, products); }
 function getProductById(id) { return loadProducts().find(p => p.id === id) || null; }
 
@@ -308,8 +627,6 @@ document.addEventListener('click', function (e) {
   }
 
   if (action === 'add-cart') {
-    // Note: Add to Cart intentionally works for guests too (existing cart_guest
-    // behavior from cart.js) — only Buy Now requires login, per spec.
     const product = getProductById(productId);
     const minOpt = getMinStorageOption(product);
     if (typeof addToCart === 'function') {
@@ -329,7 +646,6 @@ document.addEventListener('click', function (e) {
   if (action === 'toggle-wishlist') {
     if (typeof toggleWishlistItem === 'function') {
       toggleWishlistItem(productId);
-      // Re-render whatever grid is currently showing this card
       if (document.getElementById('productGrid')) refreshCatalog();
       if (document.getElementById('wishlistGrid') && typeof renderWishlistPage === 'function') renderWishlistPage();
       if (document.getElementById('featuredGrid')) renderHomeSections();
