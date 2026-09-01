@@ -2,8 +2,14 @@
    products.js — Product Catalog, Stock Badges & Buy Now Popup
    ============================================================ */
 
+const PLACEHOLDER_IMG = 'https://placehold.co/400x400/f4f0e4/a9781e?text=No+Image';
+let catalogState = { query: '', category: 'All', brand: 'All' };
+
+/* ============================================================
+   DEFAULT PRODUCT CATALOG DATA (20 Smartphones)
+   ============================================================ */
 const INITIAL_PRODUCTS = [
-  // --- APPLE PHONES (5) ---
+  // --- APPLE (5 Products) ---
   {
     id: "p101",
     brand: "Apple",
@@ -23,6 +29,37 @@ const INITIAL_PRODUCTS = [
   {
     id: "p102",
     brand: "Apple",
+    model: "iPhone 16 Pro",
+    category: "Smartphones",
+    stock: 10,
+    isNew: true,
+    isFeatured: true,
+    rating: 4.8,
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop",
+    colors: ["Natural Titanium", "Desert Titanium"],
+    storageOptions: [
+      { size: "128GB", price: 999, was: 1099 },
+      { size: "256GB", price: 1099, was: 1199 }
+    ]
+  },
+  {
+    id: "p103",
+    brand: "Apple",
+    model: "iPhone 16",
+    category: "Smartphones",
+    stock: 15,
+    isNew: true,
+    isFeatured: false,
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&auto=format&fit=crop",
+    colors: ["Ultramarine", "Teal", "Pink"],
+    storageOptions: [
+      { size: "128GB", price: 799, was: 849 }
+    ]
+  },
+  {
+    id: "p104",
+    brand: "Apple",
     model: "iPhone 15 Pro Max",
     category: "Smartphones",
     stock: 8,
@@ -36,52 +73,22 @@ const INITIAL_PRODUCTS = [
     ]
   },
   {
-    id: "p103",
+    id: "p105",
     brand: "Apple",
     model: "iPhone 15",
     category: "Smartphones",
-    stock: 15,
-    isNew: false,
-    isFeatured: false,
-    rating: 4.7,
-    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&auto=format&fit=crop",
-    colors: ["Pink", "Yellow", "Black"],
-    storageOptions: [
-      { size: "128GB", price: 799, was: 899 }
-    ]
-  },
-  {
-    id: "p104",
-    brand: "Apple",
-    model: "iPhone 14 Pro",
-    category: "Smartphones",
-    stock: 6,
+    stock: 20,
     isNew: false,
     isFeatured: false,
     rating: 4.6,
-    image: "https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?w=500&auto=format&fit=crop",
-    colors: ["Deep Purple", "Gold", "Space Black"],
+    image: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&auto=format&fit=crop",
+    colors: ["Pink", "Yellow", "Green", "Blue", "Black"],
     storageOptions: [
       { size: "128GB", price: 699, was: 799 }
     ]
   },
-  {
-    id: "p105",
-    brand: "Apple",
-    model: "iPhone SE (3rd Gen)",
-    category: "Smartphones",
-    stock: 10,
-    isNew: false,
-    isFeatured: false,
-    rating: 4.5,
-    image: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=500&auto=format&fit=crop",
-    colors: ["Midnight", "Starlight", "Red"],
-    storageOptions: [
-      { size: "64GB", price: 429, was: 479 }
-    ]
-  },
 
-  // --- SAMSUNG PHONES (5) ---
+  // --- SAMSUNG (5 Products) ---
   {
     id: "p106",
     brand: "Samsung",
@@ -100,6 +107,36 @@ const INITIAL_PRODUCTS = [
   {
     id: "p107",
     brand: "Samsung",
+    model: "Galaxy S24+",
+    category: "Smartphones",
+    stock: 9,
+    isNew: true,
+    isFeatured: false,
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&auto=format&fit=crop",
+    colors: ["Onyx Black", "Marble Gray"],
+    storageOptions: [
+      { size: "256GB", price: 999, was: 1099 }
+    ]
+  },
+  {
+    id: "p108",
+    brand: "Samsung",
+    model: "Galaxy S24",
+    category: "Smartphones",
+    stock: 11,
+    isNew: true,
+    isFeatured: false,
+    rating: 4.6,
+    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&auto=format&fit=crop",
+    colors: ["Cobalt Violet", "Amber Yellow"],
+    storageOptions: [
+      { size: "128GB", price: 799, was: 849 }
+    ]
+  },
+  {
+    id: "p109",
+    brand: "Samsung",
     model: "Galaxy Z Fold 6",
     category: "Smartphones",
     stock: 4,
@@ -113,7 +150,7 @@ const INITIAL_PRODUCTS = [
     ]
   },
   {
-    id: "p108",
+    id: "p110",
     brand: "Samsung",
     model: "Galaxy Z Flip 6",
     category: "Smartphones",
@@ -127,44 +164,14 @@ const INITIAL_PRODUCTS = [
       { size: "256GB", price: 999, was: 1099 }
     ]
   },
-  {
-    id: "p109",
-    brand: "Samsung",
-    model: "Galaxy S23 FE",
-    category: "Smartphones",
-    stock: 11,
-    isNew: false,
-    isFeatured: false,
-    rating: 4.6,
-    image: "https://images.unsplash.com/photo-1533228876829-65c94e7b5025?w=500&auto=format&fit=crop",
-    colors: ["Mint", "Graphite", "Purple"],
-    storageOptions: [
-      { size: "128GB", price: 599, was: 649 }
-    ]
-  },
-  {
-    id: "p110",
-    brand: "Samsung",
-    model: "Galaxy A55 5G",
-    category: "Smartphones",
-    stock: 20,
-    isNew: false,
-    isFeatured: false,
-    rating: 4.5,
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop",
-    colors: ["Awesome Iceblue", "Awesome Navy"],
-    storageOptions: [
-      { size: "128GB", price: 449, was: 499 }
-    ]
-  },
 
-  // --- OPPO PHONES (5) ---
+  // --- OPPO (5 Products) ---
   {
     id: "p111",
     brand: "Oppo",
     model: "Find X7 Ultra",
     category: "Smartphones",
-    stock: 0,
+    stock: 6,
     isNew: true,
     isFeatured: true,
     rating: 4.8,
@@ -183,7 +190,7 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.7,
-    image: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=500&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=500&auto=format&fit=crop",
     colors: ["Champagne Gold", "Classic Black"],
     storageOptions: [
       { size: "512GB", price: 1499, was: 1699 }
@@ -198,7 +205,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "https://images.unsplash.com/photo-1567581935884-3349723552ca?w=500&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=500&auto=format&fit=crop",
     colors: ["Nebula Silver", "Space Brown"],
     storageOptions: [
       { size: "256GB", price: 549, was: 599 }
@@ -207,67 +214,82 @@ const INITIAL_PRODUCTS = [
   {
     id: "p114",
     brand: "Oppo",
-    model: "Reno 11 5G",
+    model: "Reno 12",
     category: "Smartphones",
-    stock: 20,
-    isNew: false,
+    stock: 15,
+    isNew: true,
     isFeatured: false,
-    rating: 4.4,
-    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&auto=format&fit=crop",
-    colors: ["Wave Green", "Rock Grey"],
+    rating: 4.5,
+    image: "https://images.unsplash.com/photo-1533228876829-65c94e7b5025?w=500&auto=format&fit=crop",
+    colors: ["Astro Silver", "Matte Brown"],
     storageOptions: [
-      { size: "256GB", price: 399, was: 449 }
+      { size: "256GB", price: 449, was: 499 }
     ]
   },
   {
     id: "p115",
     brand: "Oppo",
-    model: "A98 5G",
+    model: "A3 Pro",
     category: "Smartphones",
-    stock: 12,
-    isNew: false,
+    stock: 22,
+    isNew: true,
     isFeatured: false,
-    rating: 4.3,
-    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&auto=format&fit=crop",
-    colors: ["Dreamy Blue", "Cool Black"],
+    rating: 4.4,
+    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&auto=format&fit=crop",
+    colors: ["Ocean Blue", "Mountain Blue"],
     storageOptions: [
       { size: "256GB", price: 299, was: 349 }
     ]
   },
 
-  // --- HUAWEI PHONES (5) ---
+  // --- HUAWEI (5 Products) ---
   {
     id: "p116",
     brand: "Huawei",
-    model: "Huawei Pura 70 Pro",
+    model: "Pura 70 Ultra",
     category: "Smartphones",
     stock: 5,
     isNew: true,
     isFeatured: true,
+    rating: 4.9,
+    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&auto=format&fit=crop",
+    colors: ["Chanson Green", "Mocha Brown", "Star Black"],
+    storageOptions: [
+      { size: "512GB", price: 1399, was: 1499 }
+    ]
+  },
+  {
+    id: "p117",
+    brand: "Huawei",
+    model: "Pura 70 Pro",
+    category: "Smartphones",
+    stock: 7,
+    isNew: true,
+    isFeatured: true,
     rating: 4.8,
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&auto=format&fit=crop",
     colors: ["Roland Purple", "Snow White", "Feather Black"],
     storageOptions: [
       { size: "512GB", price: 999, was: 1199 }
     ]
   },
   {
-    id: "p117",
+    id: "p118",
     brand: "Huawei",
-    model: "Mate 60 Pro",
+    model: "Pura 70",
     category: "Smartphones",
-    stock: 7,
-    isNew: false,
-    isFeatured: true,
-    rating: 4.9,
+    stock: 10,
+    isNew: true,
+    isFeatured: false,
+    rating: 4.6,
     image: "https://images.unsplash.com/photo-1567581935884-3349723552ca?w=500&auto=format&fit=crop",
-    colors: ["Green", "Silver", "Purple", "Black"],
+    colors: ["Cherry Rose Pink", "Ice White", "Black"],
     storageOptions: [
-      { size: "512GB", price: 1099, was: 1249 }
+      { size: "256GB", price: 799, was: 899 }
     ]
   },
   {
-    id: "p118",
+    id: "p119",
     brand: "Huawei",
     model: "Mate X5 Fold",
     category: "Smartphones",
@@ -275,62 +297,58 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.7,
-    image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=500&auto=format&fit=crop",
     colors: ["Feather Red", "Feather White"],
     storageOptions: [
       { size: "512GB", price: 1799, was: 1999 }
     ]
   },
   {
-    id: "p119",
-    brand: "Huawei",
-    model: "Nova 12 SE",
-    category: "Smartphones",
-    stock: 16,
-    isNew: true,
-    isFeatured: false,
-    rating: 4.4,
-    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&auto=format&fit=crop",
-    colors: ["Emerald Green", "Black"],
-    storageOptions: [
-      { size: "256GB", price: 349, was: 399 }
-    ]
-  },
-  {
     id: "p120",
     brand: "Huawei",
-    model: "P60 Pro",
+    model: "Nova 12 Pro",
     category: "Smartphones",
-    stock: 9,
-    isNew: false,
+    stock: 12,
+    isNew: true,
     isFeatured: false,
-    rating: 4.7,
-    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&auto=format&fit=crop",
-    colors: ["Rococo Pearl", "Black"],
+    rating: 4.5,
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop",
+    colors: ["Color 11", "Obsidian Black"],
     storageOptions: [
-      { size: "256GB", price: 899, was: 999 }
+      { size: "256GB", price: 549, was: 599 }
     ]
   }
 ];
 
-const PLACEHOLDER_IMG = 'https://placehold.co/400x400/f4f0e4/a9781e?text=No+Image';
-let catalogState = { query: '', category: 'All', brand: 'All' };
-
+/* Force loading fresh smartphone catalog into LocalStorage */
 function loadProducts() {
-  let products = lsGet(LS_KEYS.PRODUCTS, null);
-  if (!products || !products.length) {
-    products = INITIAL_PRODUCTS;
-    saveProducts(products);
+  const key = (typeof LS_KEYS !== 'undefined' && LS_KEYS.PRODUCTS) ? LS_KEYS.PRODUCTS : 'products_v2';
+  const existing = typeof lsGet === 'function' ? lsGet(key, null) : null;
+  
+  // Reload if no data, or if items aren't 20, or if old format exists
+  if (!existing || existing.length !== INITIAL_PRODUCTS.length || (existing[0] && existing[0].id !== "p101")) {
+    saveProducts(INITIAL_PRODUCTS);
+    return INITIAL_PRODUCTS;
   }
-  return products;
+  return existing;
 }
 
-function saveProducts(products) { lsSet(LS_KEYS.PRODUCTS, products); }
-function getProductById(id) { return loadProducts().find(p => p.id === id) || null; }
+function saveProducts(products) { 
+  const key = (typeof LS_KEYS !== 'undefined' && LS_KEYS.PRODUCTS) ? LS_KEYS.PRODUCTS : 'products_v2';
+  if (typeof lsSet === 'function') {
+    lsSet(key, products); 
+  } else {
+    localStorage.setItem(key, JSON.stringify(products));
+  }
+}
+
+function getProductById(id) { 
+  return loadProducts().find(p => p.id === id) || null; 
+}
 
 function addProduct(payload) {
   const products = loadProducts();
-  const newP = { id: generateId('p'), ...payload, createdAt: Date.now() };
+  const newP = { id: (typeof generateId === 'function' ? generateId('p') : 'p_' + Date.now()), ...payload, createdAt: Date.now() };
   products.unshift(newP);
   saveProducts(products);
   return newP;
@@ -374,7 +392,7 @@ function getMinStorageOption(product) {
 }
 
 /* ============================================================
-   REQUIREMENT 12: STOCK DISPLAY & STATUS BADGES
+   STOCK DISPLAY & STATUS BADGES
    ============================================================ */
 function getStockBadgeHtml(stock) {
   if (stock <= 0) return `<span class="badge-stock out">Out of Stock</span>`;
@@ -386,20 +404,22 @@ function buildProductCard(product) {
   const minOpt = getMinStorageOption(product);
   const outOfStock = product.stock <= 0;
   const wished = typeof isInWishlist === 'function' && typeof isLoggedIn === 'function' && isLoggedIn() && isInWishlist(product.id);
+  const escapeStr = str => (str ? String(str).replace(/"/g, '&quot;') : '');
+  const fmtPrice = val => (typeof formatPrice === 'function' ? formatPrice(val) : '$' + val);
 
   return `
     <div class="product-card" data-id="${product.id}">
       <div class="img-wrap">
         ${product.isNew ? `<span class="badge-tag">New</span>` : ''}
         ${getStockBadgeHtml(product.stock)}
-        <img src="${product.image || PLACEHOLDER_IMG}" alt="${escapeHtml(product.model)}" onerror="this.src='${PLACEHOLDER_IMG}'">
+        <img src="${product.image || PLACEHOLDER_IMG}" alt="${escapeStr(product.model)}" onerror="this.src='${PLACEHOLDER_IMG}'">
       </div>
       <div class="product-info">
-        <span class="brand-title">${escapeHtml(product.brand)}</span>
-        <h3 class="product-name">${escapeHtml(product.model)}</h3>
+        <span class="brand-title">${escapeStr(product.brand)}</span>
+        <h3 class="product-name">${escapeStr(product.model)}</h3>
         <div class="price-row">
-          <span class="price-now">${formatPrice(minOpt.price)}</span>
-          ${minOpt.was > minOpt.price ? `<span class="price-was">${formatPrice(minOpt.was)}</span>` : ''}
+          <span class="price-now">${fmtPrice(minOpt.price)}</span>
+          ${minOpt.was > minOpt.price ? `<span class="price-was">${fmtPrice(minOpt.was)}</span>` : ''}
         </div>
         <div class="card-actions">
           <button class="add-cart-btn" data-action="add-cart" data-id="${product.id}" ${outOfStock ? 'disabled' : ''}>
@@ -418,7 +438,7 @@ function buildProductCard(product) {
 }
 
 function refreshCatalog() {
-  const grid = document.getElementById('productGrid');
+  const grid = document.getElementById('productGrid') || document.getElementById('products-grid');
   if (!grid) return;
 
   let products = loadProducts();
@@ -489,18 +509,18 @@ function renderHomeSections() {
 }
 
 /* ============================================================
-   REQUIREMENT 5: BUY NOW POPUP / MODAL
+   BUY NOW POPUP / MODAL
    ============================================================ */
 function openBuyNowModal(productId) {
-  if (!isLoggedIn()) {
-    showToast('Please log in to purchase.', 'error');
+  if (typeof isLoggedIn === 'function' && !isLoggedIn()) {
+    if (typeof showToast === 'function') showToast('Please log in to purchase.', 'error');
     setTimeout(() => { window.location.href = 'login.html'; }, 500);
     return;
   }
 
   const product = getProductById(productId);
   if (!product || product.stock <= 0) {
-    showToast('Sorry, product is out of stock.', 'error');
+    if (typeof showToast === 'function') showToast('Sorry, product is out of stock.', 'error');
     return;
   }
 
@@ -520,6 +540,7 @@ function openBuyNowModal(productId) {
   let selectedColor = colors[0];
   let selectedStorage = storageOptions[0];
   let quantity = 1;
+  const fmtPrice = val => (typeof formatPrice === 'function' ? formatPrice(val) : '$' + val);
 
   function renderModalContent() {
     const subtotal = selectedStorage.price * quantity;
@@ -530,7 +551,7 @@ function openBuyNowModal(productId) {
         <div class="modal-header">
           <img src="${product.image || PLACEHOLDER_IMG}" onerror="this.src='${PLACEHOLDER_IMG}'">
           <div>
-            <h3>${escapeHtml(product.brand)} ${escapeHtml(product.model)}</h3>
+            <h3>${product.brand} ${product.model}</h3>
             ${getStockBadgeHtml(product.stock)}
           </div>
         </div>
@@ -540,7 +561,7 @@ function openBuyNowModal(productId) {
             <label>Color</label>
             <div class="btn-group">
               ${colors.map(c => `
-                <button class="opt-btn ${c === selectedColor ? 'active' : ''}" data-color="${escapeHtml(c)}">${escapeHtml(c)}</button>
+                <button class="opt-btn ${c === selectedColor ? 'active' : ''}" data-color="${c}">${c}</button>
               `).join('')}
             </div>
           </div>
@@ -550,7 +571,7 @@ function openBuyNowModal(productId) {
             <div class="btn-group">
               ${storageOptions.map((s, idx) => `
                 <button class="opt-btn ${s.size === selectedStorage.size ? 'active' : ''}" data-storage-idx="${idx}">
-                  ${escapeHtml(s.size)} (${formatPrice(s.price)})
+                  ${s.size} (${fmtPrice(s.price)})
                 </button>
               `).join('')}
             </div>
@@ -567,7 +588,7 @@ function openBuyNowModal(productId) {
 
           <div class="subtotal-row">
             <span>Subtotal</span>
-            <strong class="subtotal-val">${formatPrice(subtotal)}</strong>
+            <strong class="subtotal-val">${fmtPrice(subtotal)}</strong>
           </div>
         </div>
 
@@ -604,7 +625,11 @@ function openBuyNowModal(productId) {
         qty: quantity
       };
 
-      lsSet('buyNowItem', buyNowPayload);
+      if (typeof lsSet === 'function') {
+        lsSet('buyNowItem', buyNowPayload);
+      } else {
+        localStorage.setItem('buyNowItem', JSON.stringify(buyNowPayload));
+      }
       modal.classList.remove('open');
       window.location.href = 'checkout.html?mode=buynow';
     };
@@ -646,7 +671,7 @@ document.addEventListener('click', function (e) {
   if (action === 'toggle-wishlist') {
     if (typeof toggleWishlistItem === 'function') {
       toggleWishlistItem(productId);
-      if (document.getElementById('productGrid')) refreshCatalog();
+      if (document.getElementById('productGrid') || document.getElementById('products-grid')) refreshCatalog();
       if (document.getElementById('wishlistGrid') && typeof renderWishlistPage === 'function') renderWishlistPage();
       if (document.getElementById('featuredGrid')) renderHomeSections();
     }
@@ -654,7 +679,8 @@ document.addEventListener('click', function (e) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  if (document.getElementById('productGrid')) {
+  loadProducts();
+  if (document.getElementById('productGrid') || document.getElementById('products-grid')) {
     const params = new URLSearchParams(window.location.search);
     const q = params.get('q');
     if (q) {
