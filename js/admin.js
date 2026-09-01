@@ -2,8 +2,53 @@
    admin.js — Admin Dashboard, CRUD, Sales Analytics & Orders
    ============================================================ */
 
+/* ---------- Helper Fallbacks & Route Protection ---------- */
+function requireAdmin() {
+  const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+  const isAdmin = user && (user.role === 'admin' || user.name === 'admin' || user.email === 'admin@angkormass.com');
+  
+  if (!isAdmin) {
+    if (typeof showToast === 'function') showToast('Access denied. Admin rights required.', 'error');
+    setTimeout(() => { window.location.href = 'index.html'; }, 800);
+    return false;
+  }
+  return true;
+}
+
+function getMinStorageOption(product) {
+  if (product.storageOptions && product.storageOptions.length > 0) {
+    return product.storageOptions[0];
+  }
+  return { size: 'Standard', price: product.price || 0, was: product.price || 0 };
+}
+
+function getStockBadgeHtml(stock) {
+  const num = Number(stock || 0);
+  if (num === 0) return '<span style="color:var(--danger,#e63946); font-weight:600;">Out of Stock</span>';
+  if (num <= 5) return '<span style="color:var(--warn,#ff9f1c); font-weight:600;">Low Stock</span>';
+  return '<span style="color:var(--good,#2ec4b6); font-weight:600;">In Stock</span>';
+}
+
+function restoreStock(productId, qty) {
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
+  const idx = products.findIndex(p => p.id === productId);
+  if (idx !== -1) {
+    products[idx].stock = Number(products[idx].stock || 0) + Number(qty);
+    lsSet(LS_KEYS.PRODUCTS, products);
+  }
+}
+
+function decreaseStock(productId, qty) {
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
+  const idx = products.findIndex(p => p.id === productId);
+  if (idx !== -1) {
+    products[idx].stock = Math.max(0, Number(products[idx].stock || 0) - Number(qty));
+    lsSet(LS_KEYS.PRODUCTS, products);
+  }
+}
+
+/* ---------- Main Admin Init ---------- */
 function initAdminPage() {
-  // Requirement 9: Strict Route protection
   if (!requireAdmin()) return;
 
   initAdminTabs();
@@ -40,25 +85,28 @@ function initAdminTabs() {
 }
 
 /* ============================================================
-   REQUIREMENT 10 & 14: DYNAMIC DASHBOARD & SALES STATISTICS
+   DYNAMIC DASHBOARD & SALES STATISTICS
    ============================================================ */
 function renderDashboardStats() {
-  const products = loadProducts();
-  const orders = loadOrders();
-  const users = getUsers();
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
+  const orders = lsGet(LS_KEYS.ORDERS, []);
+  const users = lsGet(LS_KEYS.USERS, []);
 
   const totalProducts = products.length;
-  const totalUsers = users.filter(u => u.role === 'user').length;
+  const totalUsers = users.length;
   const totalOrders = orders.length;
 
-  const validOrders = orders.filter(o => o.status !== 'Cancelled');
-  const completedOrdersList = orders.filter(o => o.status === 'Delivered');
-  const pendingOrdersList = orders.filter(o => o.status === 'Pending');
+  const validOrders = orders.filter(o => (o.status || '').toLowerCase() !== 'cancelled');
+  const completedOrdersList = orders.filter(o => {
+    const s = (o.status || '').toLowerCase();
+    return s === 'delivered' || s === 'completed';
+  });
+  const pendingOrdersList = orders.filter(o => (o.status || '').toLowerCase() === 'pending');
 
-  const totalSales = validOrders.reduce((sum, o) => sum + o.total, 0);
+  const totalSales = validOrders.reduce((sum, o) => sum + Number(o.totalAmount || o.total || 0), 0);
 
-  const lowStockCount = products.filter(p => p.stock > 0 && p.stock <= 5).length;
-  const outOfStockCount = products.filter(p => p.stock <= 0).length;
+  const lowStockCount = products.filter(p => Number(p.stock) > 0 && Number(p.stock) <= 5).length;
+  const outOfStockCount = products.filter(p => Number(p.stock) <= 0).length;
 
   const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
@@ -73,22 +121,27 @@ function renderDashboardStats() {
 }
 
 function renderSalesStatistics() {
-  const orders = loadOrders();
-  const validOrders = orders.filter(o => o.status !== 'Cancelled');
-  const cancelledOrders = orders.filter(o => o.status === 'Cancelled');
-  const completedOrders = orders.filter(o => o.status === 'Delivered');
-  const pendingOrders = orders.filter(o => o.status === 'Pending');
+  const orders = lsGet(LS_KEYS.ORDERS, []);
+  const validOrders = orders.filter(o => (o.status || '').toLowerCase() !== 'cancelled');
+  const cancelledOrders = orders.filter(o => (o.status || '').toLowerCase() === 'cancelled');
+  const completedOrders = orders.filter(o => {
+    const s = (o.status || '').toLowerCase();
+    return s === 'delivered' || s === 'completed';
+  });
+  const pendingOrders = orders.filter(o => (o.status || '').toLowerCase() === 'pending');
 
-  const totalRevenue = validOrders.reduce((sum, o) => sum + o.total, 0);
+  const totalRevenue = validOrders.reduce((sum, o) => sum + Number(o.totalAmount || o.total || 0), 0);
 
   let totalUnitsSold = 0;
   const productSalesMap = {};
 
   validOrders.forEach(o => {
-    (o.products || []).forEach(item => {
-      totalUnitsSold += item.qty;
-      const key = item.model || 'Unknown Product';
-      productSalesMap[key] = (productSalesMap[key] || 0) + item.qty;
+    const items = o.items || o.products || [];
+    items.forEach(item => {
+      const qty = Number(item.quantity || item.qty || 1);
+      totalUnitsSold += qty;
+      const key = item.model || item.name || 'Unknown Product';
+      productSalesMap[key] = (productSalesMap[key] || 0) + qty;
     });
   });
 
@@ -112,43 +165,45 @@ function renderSalesStatistics() {
 }
 
 /* ============================================================
-   REQUIREMENT 11: PRODUCT CRUD & DELETE CONFIRMATION
+   PRODUCT CRUD & MANAGEMENT
    ============================================================ */
 function renderAdminProductsTable() {
   const tbody = document.getElementById('adminProductsTbody');
   if (!tbody) return;
 
-  const products = loadProducts();
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
   if (!products.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:24px;">No products yet.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px;">No products found.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = products.map(p => `
     <tr>
-      <td><img src="${p.image || PLACEHOLDER_IMG}" width="40" height="40" style="object-fit:cover; border-radius:6px;" onerror="this.src='${PLACEHOLDER_IMG}'"></td>
-      <td>${escapeHtml(p.brand)}</td>
+      <td><img src="${p.image || 'https://via.placeholder.com/40'}" width="40" height="40" style="object-fit:cover; border-radius:6px;"></td>
+      <td><strong>${escapeHtml(p.brand)}</strong></td>
       <td>${escapeHtml(p.model)}</td>
       <td>${formatPrice(getMinStorageOption(p).price)}</td>
       <td>${p.stock}</td>
       <td>${getStockBadgeHtml(p.stock)}</td>
       <td>
-        <button class="btn-sm" onclick="openProductModal('${p.id}')">Edit</button>
-        <button class="btn-sm btn-danger" onclick="confirmDeleteProduct('${p.id}')">Delete</button>
+        <button class="btn-sm" onclick="openProductModal('${p.id}')" style="background:#3a86ff; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Edit</button>
+        <button class="btn-sm btn-danger" onclick="confirmDeleteProduct('${p.id}')" style="background:#e63946; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
       </td>
     </tr>
   `).join('');
 }
 
 function confirmDeleteProduct(id) {
-  const product = getProductById(id);
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
+  const product = products.find(p => p.id === id);
   if (!product) return;
 
-  // Requirement 11: Confirmation Dialog
   if (confirm(`Are you sure you want to delete this product: "${product.model}"?`)) {
-    deleteProduct(id);
+    const updated = products.filter(p => p.id !== id);
+    lsSet(LS_KEYS.PRODUCTS, updated);
     showToast('Product deleted.', 'success');
     renderDashboardStats();
+    renderSalesStatistics();
     renderAdminProductsTable();
   }
 }
@@ -189,27 +244,41 @@ function initProductModal() {
     const colors = (colorsRaw ? colorsRaw.split(',') : ['Black'])
       .map(c => c.trim()).filter(Boolean);
 
-    const payload = {
-      brand, model, category, ram, stock,
-      image: image || PLACEHOLDER_IMG,
-      description,
-      colors,
-      storageOptions,
-      isNew: document.getElementById('pfIsNew').checked,
-      isFeatured: document.getElementById('pfIsFeatured').checked,
-      isOffer: discount > 0
-    };
+    const products = lsGet(LS_KEYS.PRODUCTS, []);
 
     if (id) {
-      updateProduct(id, payload);
-      showToast('Product updated.', 'success');
+      const idx = products.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        products[idx] = {
+          ...products[idx],
+          brand, model, category, ram, stock,
+          image: image || 'https://via.placeholder.com/150',
+          description, colors, storageOptions,
+          isNew: document.getElementById('pfIsNew').checked,
+          isFeatured: document.getElementById('pfIsFeatured').checked,
+          isOffer: discount > 0
+        };
+        showToast('Product updated successfully.', 'success');
+      }
     } else {
-      addProduct(payload);
-      showToast('Product added.', 'success');
+      const newProduct = {
+        id: generateId('p'),
+        brand, model, category, ram, stock,
+        image: image || 'https://via.placeholder.com/150',
+        description, colors, storageOptions,
+        isNew: document.getElementById('pfIsNew').checked,
+        isFeatured: document.getElementById('pfIsFeatured').checked,
+        isOffer: discount > 0,
+        rating: 5.0, createdAt: Date.now()
+      };
+      products.unshift(newProduct);
+      showToast('Product added successfully.', 'success');
     }
 
+    lsSet(LS_KEYS.PRODUCTS, products);
     closeProductModal();
     renderDashboardStats();
+    renderSalesStatistics();
     renderAdminProductsTable();
   });
 
@@ -226,7 +295,8 @@ function openProductModal(id) {
   form.reset();
 
   const title = document.getElementById('pfModalTitle');
-  const product = id ? getProductById(id) : null;
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
+  const product = id ? products.find(p => p.id === id) : null;
 
   document.getElementById('pfId').value = id || '';
   if (title) title.textContent = product ? 'Edit Product' : 'Add New Product';
@@ -241,90 +311,116 @@ function openProductModal(id) {
       ? Math.round((1 - minOpt.price / minOpt.was) * 100) : 0;
     document.getElementById('pfDiscount').value = discountPct || '';
     document.getElementById('pfRam').value = product.ram || '';
-    document.getElementById('pfStorage').value = (product.storageOptions || []).map(s => s.size).join(', ');
+    document.getElementById('pfStorage').value = (product.storageOptions || []).map(s => typeof s === 'object' ? s.size : s).join(', ');
     document.getElementById('pfColors').value = (product.colors || []).join(', ');
     document.getElementById('pfImage').value = product.image || '';
     document.getElementById('pfDescription').value = product.description || '';
-    document.getElementById('pfStock').value = product.stock;
+    document.getElementById('pfStock').value = product.stock != null ? product.stock : 0;
     document.getElementById('pfIsNew').checked = !!product.isNew;
     document.getElementById('pfIsFeatured').checked = !!product.isFeatured;
   }
 
-  modal.classList.add('open');
+  modal.style.display = 'flex';
 }
 
 function closeProductModal() {
   const modal = document.getElementById('productFormModal');
-  if (modal) modal.classList.remove('open');
+  if (modal) modal.style.display = 'none';
 }
 
 /* ============================================================
-   REQUIREMENT 13: ADMIN ORDER MANAGEMENT & STATUS UPDATE
+   ADMIN ORDER MANAGEMENT & STATUS UPDATE
    ============================================================ */
 function renderAdminOrdersTable() {
   const tbody = document.getElementById('adminOrdersTbody');
   if (!tbody) return;
 
-  const orders = loadOrders().sort((a, b) => b.date - a.date);
+  const orders = lsGet(LS_KEYS.ORDERS, []);
   if (!orders.length) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:24px;">No orders yet.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">No orders yet.</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = orders.map(o => `
-    <tr>
-      <td>#${o.id}</td>
-      <td>${escapeHtml(o.customerName)}<br><small style="color:var(--text-muted);">${escapeHtml(o.userEmail)} · ${escapeHtml(o.phone || '')}</small></td>
-      <td>${o.products.map(p => `${escapeHtml(p.model)} (${escapeHtml(p.color)}, ${escapeHtml(p.storage)}) × ${p.qty}`).join('<br>')}</td>
-      <td>${escapeHtml(o.paymentMethod || '-')}<br><small style="color:var(--text-muted);">${new Date(o.date).toLocaleDateString()}</small></td>
-      <td>${formatPrice(o.total)}</td>
-      <td>
-        <select onchange="handleAdminStatusChange('${o.id}', this.value)" class="status-select">
-          ${ORDER_STATUSES.map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>`).join('')}
-        </select>
-      </td>
-    </tr>
-  `).join('');
+  const ORDER_STATUSES = ['Pending', 'Completed', 'Cancelled'];
+
+  tbody.innerHTML = orders.map(o => {
+    const items = o.items || o.products || [];
+    const itemsHtml = items.map(p => `${escapeHtml(p.model || p.name || 'Item')} × ${p.quantity || p.qty || 1}`).join('<br>');
+    const currentStatus = o.status || 'Pending';
+
+    return `
+      <tr>
+        <td>#${escapeHtml(o.id || '')}</td>
+        <td>${escapeHtml(o.customerName || o.userEmail || 'Guest')}</td>
+        <td>${itemsHtml || 'No items'}</td>
+        <td>${escapeHtml(o.paymentMethod || 'COD')}</td>
+        <td>${formatPrice(o.totalAmount || o.total || 0)}</td>
+        <td>
+          <select onchange="handleAdminStatusChange('${o.id}', this.value)" style="padding:4px 8px; border-radius:4px; border:1px solid #ccc;">
+            ${ORDER_STATUSES.map(s => `<option value="${s}" ${currentStatus.toLowerCase() === s.toLowerCase() ? 'selected' : ''}>${s}</option>`).join('')}
+          </select>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function handleAdminStatusChange(orderId, newStatus) {
-  const orders = loadOrders();
+  const orders = lsGet(LS_KEYS.ORDERS, []);
   const order = orders.find(o => o.id === orderId);
   if (!order) return;
 
-  const wasCancelled = order.status === 'Cancelled';
-  const isNowCancelled = newStatus === 'Cancelled';
+  const wasCancelled = (order.status || '').toLowerCase() === 'cancelled';
+  const isNowCancelled = newStatus.toLowerCase() === 'cancelled';
 
-  // Restore or decrease stock if status switches to/from Cancelled
+  const items = order.items || order.products || [];
+
+  // Restore or decrease stock when switching to/from Cancelled
   if (isNowCancelled && !wasCancelled) {
-    order.products.forEach(p => restoreStock(p.productId, p.qty));
+    items.forEach(p => restoreStock(p.productId || p.id, p.quantity || p.qty || 1));
   } else if (!isNowCancelled && wasCancelled) {
-    order.products.forEach(p => decreaseStock(p.productId, p.qty));
+    items.forEach(p => decreaseStock(p.productId || p.id, p.quantity || p.qty || 1));
   }
 
   order.status = newStatus;
-  saveOrders(orders);
+  lsSet(LS_KEYS.ORDERS, orders);
   showToast(`Order #${orderId} changed to ${newStatus}`, 'success');
+  
   renderDashboardStats();
   renderSalesStatistics();
   renderAdminProductsTable();
   renderAdminOrdersTable();
 }
 
+/* ============================================================
+   USER MANAGEMENT
+   ============================================================ */
 function renderAdminUsersTable() {
   const tbody = document.getElementById('adminUsersTbody');
   if (!tbody) return;
 
-  const users = getUsers();
-  tbody.innerHTML = users.map(u => `
-    <tr>
-      <td>${escapeHtml(u.name)}</td>
-      <td>${escapeHtml(u.email)}</td>
-      <td><span class="role-badge role-${u.role}">${u.role}</span></td>
-    </tr>
-  `).join('');
+  const users = lsGet(LS_KEYS.USERS, []);
+  if (!users.length) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:24px;">No users found.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = users.map(u => {
+    const roleBadge = u.role === 'admin' || u.name === 'admin' || u.email === 'admin@angkormass.com'
+      ? '<span style="background:#e63946; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px;">Admin</span>'
+      : '<span style="background:#e0e0e0; color:#333; padding:2px 6px; border-radius:4px; font-size:12px;">User</span>';
+
+    return `
+      <tr>
+        <td><strong>${escapeHtml(u.name || 'User')}</strong></td>
+        <td>${escapeHtml(u.email || '')}</td>
+        <td>${roleBadge}</td>
+      </tr>
+    `;
+  }).join('');
 }
 
+/* ---------- Document Ready Event ---------- */
 document.addEventListener('DOMContentLoaded', function () {
   if (document.getElementById('adminMainWrap')) {
     initAdminPage();

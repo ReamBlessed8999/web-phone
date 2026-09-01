@@ -44,10 +44,6 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-/* Helper: figure out the relative path prefix so links work whether
-   we're inside /pages/ or at the site root. All our pages currently
-   live in /pages/, so links stay page-relative (e.g. "index.html"). */
-
 /* ============================================================
    SEED DATA — Runs on first load to guarantee default records
    ============================================================ */
@@ -179,6 +175,9 @@ function renderNavbar() {
   const cartCount = typeof getCartCount === 'function' ? getCartCount() : 0;
   const wishCount = typeof getWishlistCount === 'function' ? getWishlistCount() : 0;
 
+  // ឆែកមើលយ៉ាងច្បាស់លាស់ថាតើជា Admin ឬអត់
+  const isAdmin = user && (user.role === 'admin' || user.name === 'admin' || user.email === 'admin@angkormass.com');
+
   let links = '';
 
   if (!user) {
@@ -194,7 +193,7 @@ function renderNavbar() {
       <a href="login.html">Login</a>
       <a href="register.html">Register</a>
     `;
-  } else if (user.role === 'admin') {
+  } else if (isAdmin) {
     // Admin Navigation
     links = `
       <a href="index.html">Home</a>
@@ -207,7 +206,7 @@ function renderNavbar() {
       <a href="admin.html#users">Users</a>
       <span class="nav-spacer"></span>
       <span class="nav-user-name">👤 ${escapeHtml(user.name)}</span>
-      <span class="nav-admin-badge">Admin</span>
+      <span class="nav-admin-badge" style="background:#e63946; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px; margin-right:8px;">Admin</span>
       <a href="#" id="logoutLink">Logout</a>
     `;
   } else {
@@ -313,3 +312,25 @@ document.addEventListener('DOMContentLoaded', function () {
   initNavToggle();
   initContactForm();
 });
+
+/* ---------- Auth Helpers ---------- */
+function getCurrentUser() {
+  const user = lsGet(LS_KEYS.CURRENT_USER, null);
+  
+  // បង្ខំឱ្យស្គាល់ជា Admin ជានិច្ច ប្រសិនបើឈ្មោះ ឬ Email ត្រូវគ្នា
+  if (user) {
+    if (user.name === 'admin' || user.email === 'admin@angkormass.com') {
+      user.role = 'admin';
+    }
+  }
+  
+  return user;
+}
+
+function logoutUser() {
+  localStorage.removeItem(LS_KEYS.CURRENT_USER);
+  showToast('Logged out successfully', 'info');
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 500);
+}
