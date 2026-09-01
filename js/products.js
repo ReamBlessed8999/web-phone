@@ -66,7 +66,7 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: true,
     rating: 4.8,
-    image: "https://i.pinimg.com/1200x/74/9c/7f/749c7f31445b165258c4e491703c1b02.jpg",
+    image: "https://i.pinimg.com/1200x/b4/17/57/b4175791e611cc3a44867c0e57bd67e0.jpg",
     colors: ["Natural Titanium", "Blue Titanium"],
     storageOptions: [
       { size: "256GB", price: 1099, was: 1199 }
@@ -81,7 +81,7 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.6,
-    image: "https://i.pinimg.com/736x/ce/c8/05/cec805810b06e68eaa3d3356e91a96cd.jpg",
+    image: "https://i.pinimg.com/736x/24/57/77/2457778e56d891f4b0cc73d498ae647a.jpg",
     colors: ["Pink", "Yellow", "Green", "Blue", "Black"],
     storageOptions: [
       { size: "128GB", price: 699, was: 799 }
@@ -128,7 +128,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "https://i.pinimg.com/1200x/6d/73/98/6d7398ae99fb7e8bafff8b069dedae59.jpg",
+    image: "https://i.pinimg.com/736x/a1/17/39/a11739febc2165d8586f4b761f7efa54.jpg",
     colors: ["Cobalt Violet", "Amber Yellow"],
     storageOptions: [
       { size: "128GB", price: 799, was: 849 }
