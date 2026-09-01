@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@500;600;700&display=swap');
+
+:root {
+  --primary: #d4af37;           /* Metallic Gold */
+  --primary-dark: #b38f2a;
+  --bg-main: #f8fafc;           /* Clean Off-White */
+  --surface: #ffffff;
+  --text-main: #0f172a;         /* Deep Navy / Slate */
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --footer-bg: #0f172a;         /* Deep Slate Dark */
+  --success: #10b981;
+  --danger: #ef4444;
+
+  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: 'Inter', 'Kantumruy Pro', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; }
+
+/* ---------- Top Strip ---------- */
+.topbar {
+  background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+  height: 6px;
+  width: 100%;
+}
+
+/* ---------- Header Section ---------- */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+.header-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.logo { display: flex; flex-direction: column; line-height: 1.1; }
+
+.logo-kh {
+  font-family: 'Kantumruy Pro', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  letter-spacing: 0.5px;
+}
+
+.logo-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ---------- Form Elements ---------- */
+.form-group { margin-bottom: 18px; display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13.5px; font-weight: 600; color: var(--text-main); }
+.form-group input {
+  width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 14px; outline: none; background: #fcfbf8; transition: all 0.2s ease; font-family: inherit;
+}
+.form-group input:focus {
+  border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.btn-primary {
+  width: 100%; padding: 13px; background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #1f2937; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+.btn-primary:hover { opacity: 0.94; transform: translateY(-1px); }
+
+/* ---------- Auth Pages ---------- */
+.auth-shell { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+.auth-wrap {
+  width: 100%; max-width: 400px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px 28px; box-shadow: var(--shadow-md);
+}
+.auth-wrap h2 { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+.auth-subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+.auth-submit-btn { width: 100%; padding: 12px; margin-top: 8px; }
+.auth-switch { text-align: center; margin-top: 20px; font-size: 13.5px; color: var(--text-muted); }
+.auth-switch a { color: var(--primary-dark); font-weight: 600; }
+.auth-switch a:hover { text-decoration: underline; }
+.auth-msg {
+  display: none; padding: 10px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 16px; text-align: center;
+}
+.auth-msg.show { display: block; }
+.auth-msg.success { background: rgba(16,185,129,0.1); color: #047857; }
+.auth-msg.error { background: rgba(239,68,68,0.1); color: #b91c1c; }
+
+/* ---------- Footer ---------- */
+footer { background: var(--footer-bg); color: #94a3b8; margin-top: 60px; }
+.footer-bottom { background: #0b1120; border-top: 1px solid #1e293b; text-align: center; padding: 16px; font-size: 13.3px; color: #64748b; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .header-inner { gap: 14px; }
+  .logo-kh { font-size: 22px; }
+}
+
+@media (max-width: 760px) {
+  header { padding: 0; }
+  .header-inner { padding: 12px 16px; display: grid; grid-template-columns: 1fr auto; align-items: center; }
+}

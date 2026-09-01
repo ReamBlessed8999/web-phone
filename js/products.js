@@ -205,7 +205,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=500&auto=format&fit=crop",
+    image: "https://i.pinimg.com/736x/06/16/8f/06168f862712bdd98e0a499cb0bb5493.jpg",
     colors: ["Nebula Silver", "Space Brown"],
     storageOptions: [
       { size: "256GB", price: 549, was: 599 }

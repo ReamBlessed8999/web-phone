@@ -1,0 +1,133 @@
+@import url('style.css');
+
+/* ---------- About Hero Section ---------- */
+.about-hero {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 60%, #3a2f14 100%);
+  border-radius: var(--radius-lg);
+  color: #ffffff;
+  padding: 56px 40px;
+  text-align: center;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow-md);
+}
+
+.about-hero h1 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+
+.about-hero p {
+  max-width: 680px;
+  margin: 0 auto;
+  color: #cbd5e1;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ---------- Feature Cards Grid ---------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.about-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.about-card .icon {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 16px;
+  background: var(--primary-light);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.about-card p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ---------- Services Section ---------- */
+.services-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.service-pill {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.service-pill:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* ---------- Responsive Adjustments ---------- */
+@media (max-width: 760px) {
+  .about-hero {
+    padding: 40px 20px;
+  }
+
+  .about-hero h1 {
+    font-size: 28px;
+  }
+
+  .about-hero p {
+    font-size: 14.5px;
+  }
+
+  .services-row {
+    gap: 8px;
+  }
+
+  .service-pill {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
