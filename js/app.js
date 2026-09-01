@@ -184,7 +184,7 @@ function renderNavbar() {
     // Guest User Navigation
     links = `
       <a href="index.html">Home</a>
-      <a href="index.html#products">Products</a>
+      
       <a href="about.html">About Us</a>
       <a href="contact.html">Contact</a>
       <a href="javascript:void(0)" onclick="openCartSidebar()">Cart (${cartCount})</a>
@@ -194,16 +194,13 @@ function renderNavbar() {
       <a href="register.html">Register</a>
     `;
   } else if (isAdmin) {
-    // Admin Navigation
+    // Admin Navigation - លុប Dashboard, Orders, Users ចេញ
     links = `
       <a href="index.html">Home</a>
-      <a href="index.html#products">Products</a>
+
       <a href="about.html">About Us</a>
       <a href="contact.html">Contact</a>
-      <a href="admin.html#dashboard">Dashboard</a>
       <a href="admin.html#products">Products Management</a>
-      <a href="admin.html#orders">Orders</a>
-      <a href="admin.html#users">Users</a>
       <span class="nav-spacer"></span>
       <span class="nav-user-name">👤 ${escapeHtml(user.name)}</span>
       <span class="nav-admin-badge" style="background:#e63946; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px; margin-right:8px;">Admin</span>
@@ -213,7 +210,7 @@ function renderNavbar() {
     // Logged-in Normal User Navigation
     links = `
       <a href="index.html">Home</a>
-      <a href="index.html#products">Products</a>
+    
       <a href="about.html">About Us</a>
       <a href="contact.html">Contact</a>
       <a href="javascript:void(0)" onclick="openCartSidebar()">Cart (${cartCount})</a>
