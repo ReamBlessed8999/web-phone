@@ -1,6 +1,13 @@
 /* ============================================================
    admin.js — Admin Dashboard, CRUD, Sales Analytics & Orders
+   (with Pagination Support)
    ============================================================ */
+
+/* ---------- Pagination State Config ---------- */
+let currentProductsPage = 1;
+let currentOrdersPage = 1;
+let currentUsersPage = 1;
+const itemsPerPage = 5; // Change number of items per page if needed
 
 /* ---------- Helper Fallbacks & Route Protection ---------- */
 function requireAdmin() {
@@ -165,32 +172,79 @@ function renderSalesStatistics() {
 }
 
 /* ============================================================
-   PRODUCT CRUD & MANAGEMENT
+   REUSABLE PAGINATION RENDERER HELPER
+   ============================================================ */
+function renderPaginationUI(infoId, prevBtnId, nextBtnId, numbersWrapId, totalItems, totalPages, currentPage, onPageChange) {
+  const infoEl = document.getElementById(infoId);
+  const prevBtn = document.getElementById(prevBtnId);
+  const nextBtn = document.getElementById(nextBtnId);
+  const numbersWrap = document.getElementById(numbersWrapId);
+
+  if (!infoEl || !prevBtn || !nextBtn || !numbersWrap) return;
+
+  const startShow = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const endShow = Math.min(currentPage * itemsPerPage, totalItems);
+
+  infoEl.textContent = `Showing ${startShow} to ${endShow} of ${totalItems} entries`;
+
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+  prevBtn.onclick = () => { if (currentPage > 1) onPageChange(currentPage - 1); };
+  nextBtn.onclick = () => { if (currentPage < totalPages) onPageChange(currentPage + 1); };
+
+  let btnsHtml = '';
+  for (let i = 1; i <= totalPages; i++) {
+    const activeStyle = i === currentPage 
+      ? 'background:#1a1a1a; color:#fff;' 
+      : 'background:#f0f0f0; color:#333;';
+    btnsHtml += `<button type="button" style="padding:5px 11px; border:none; border-radius:4px; cursor:pointer; font-weight:600; ${activeStyle}" onclick="(${onPageChange})(${i})">${i}</button>`;
+  }
+  numbersWrap.innerHTML = btnsHtml;
+}
+
+/* ============================================================
+   PRODUCT CRUD & MANAGEMENT (PAGINATED)
    ============================================================ */
 function renderAdminProductsTable() {
   const tbody = document.getElementById('adminProductsTbody');
   if (!tbody) return;
 
   const products = lsGet(LS_KEYS.PRODUCTS, []);
-  if (!products.length) {
+  const totalItems = products.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+  if (currentProductsPage > totalPages) currentProductsPage = totalPages;
+  if (currentProductsPage < 1) currentProductsPage = 1;
+
+  const start = (currentProductsPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginatedProducts = products.slice(start, end);
+
+  if (!paginatedProducts.length) {
     tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px;">No products found.</td></tr>`;
-    return;
+  } else {
+    tbody.innerHTML = paginatedProducts.map(p => `
+      <tr>
+        <td><img src="${p.image || 'https://via.placeholder.com/40'}" width="40" height="40" style="object-fit:cover; border-radius:6px;"></td>
+        <td><strong>${escapeHtml(p.brand)}</strong></td>
+        <td>${escapeHtml(p.model)}</td>
+        <td>${formatPrice(getMinStorageOption(p).price)}</td>
+        <td>${p.stock}</td>
+        <td>${getStockBadgeHtml(p.stock)}</td>
+        <td>
+          <button class="btn-sm" onclick="openProductModal('${p.id}')" style="background:#3a86ff; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Edit</button>
+          <button class="btn-sm btn-danger" onclick="confirmDeleteProduct('${p.id}')" style="background:#e63946; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
+        </td>
+      </tr>
+    `).join('');
   }
 
-  tbody.innerHTML = products.map(p => `
-    <tr>
-      <td><img src="${p.image || 'https://via.placeholder.com/40'}" width="40" height="40" style="object-fit:cover; border-radius:6px;"></td>
-      <td><strong>${escapeHtml(p.brand)}</strong></td>
-      <td>${escapeHtml(p.model)}</td>
-      <td>${formatPrice(getMinStorageOption(p).price)}</td>
-      <td>${p.stock}</td>
-      <td>${getStockBadgeHtml(p.stock)}</td>
-      <td>
-        <button class="btn-sm" onclick="openProductModal('${p.id}')" style="background:#3a86ff; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Edit</button>
-        <button class="btn-sm btn-danger" onclick="confirmDeleteProduct('${p.id}')" style="background:#e63946; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
-      </td>
-    </tr>
-  `).join('');
+  renderPaginationUI(
+    'productsPaginationInfo', 'productsPrevBtn', 'productsNextBtn', 'productsPageNumbers',
+    totalItems, totalPages, currentProductsPage,
+    (newPage) => { currentProductsPage = newPage; renderAdminProductsTable(); }
+  );
 }
 
 function confirmDeleteProduct(id) {
@@ -329,40 +383,55 @@ function closeProductModal() {
 }
 
 /* ============================================================
-   ADMIN ORDER MANAGEMENT & STATUS UPDATE
+   ADMIN ORDER MANAGEMENT & STATUS UPDATE (PAGINATED)
    ============================================================ */
 function renderAdminOrdersTable() {
   const tbody = document.getElementById('adminOrdersTbody');
   if (!tbody) return;
 
   const orders = lsGet(LS_KEYS.ORDERS, []);
-  if (!orders.length) {
+  const totalItems = orders.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+  if (currentOrdersPage > totalPages) currentOrdersPage = totalPages;
+  if (currentOrdersPage < 1) currentOrdersPage = 1;
+
+  const start = (currentOrdersPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginatedOrders = orders.slice(start, end);
+
+  if (!paginatedOrders.length) {
     tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">No orders yet.</td></tr>`;
-    return;
+  } else {
+    const ORDER_STATUSES = ['Pending', 'Completed', 'Cancelled'];
+
+    tbody.innerHTML = paginatedOrders.map(o => {
+      const items = o.items || o.products || [];
+      const itemsHtml = items.map(p => `${escapeHtml(p.model || p.name || 'Item')} × ${p.quantity || p.qty || 1}`).join('<br>');
+      const currentStatus = o.status || 'Pending';
+
+      return `
+        <tr>
+          <td>#${escapeHtml(o.id || '')}</td>
+          <td>${escapeHtml(o.customerName || o.userEmail || 'Guest')}</td>
+          <td>${itemsHtml || 'No items'}</td>
+          <td>${escapeHtml(o.paymentMethod || 'COD')}</td>
+          <td>${formatPrice(o.totalAmount || o.total || 0)}</td>
+          <td>
+            <select onchange="handleAdminStatusChange('${o.id}', this.value)" style="padding:4px 8px; border-radius:4px; border:1px solid #ccc;">
+              ${ORDER_STATUSES.map(s => `<option value="${s}" ${currentStatus.toLowerCase() === s.toLowerCase() ? 'selected' : ''}>${s}</option>`).join('')}
+            </select>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
-  const ORDER_STATUSES = ['Pending', 'Completed', 'Cancelled'];
-
-  tbody.innerHTML = orders.map(o => {
-    const items = o.items || o.products || [];
-    const itemsHtml = items.map(p => `${escapeHtml(p.model || p.name || 'Item')} × ${p.quantity || p.qty || 1}`).join('<br>');
-    const currentStatus = o.status || 'Pending';
-
-    return `
-      <tr>
-        <td>#${escapeHtml(o.id || '')}</td>
-        <td>${escapeHtml(o.customerName || o.userEmail || 'Guest')}</td>
-        <td>${itemsHtml || 'No items'}</td>
-        <td>${escapeHtml(o.paymentMethod || 'COD')}</td>
-        <td>${formatPrice(o.totalAmount || o.total || 0)}</td>
-        <td>
-          <select onchange="handleAdminStatusChange('${o.id}', this.value)" style="padding:4px 8px; border-radius:4px; border:1px solid #ccc;">
-            ${ORDER_STATUSES.map(s => `<option value="${s}" ${currentStatus.toLowerCase() === s.toLowerCase() ? 'selected' : ''}>${s}</option>`).join('')}
-          </select>
-        </td>
-      </tr>
-    `;
-  }).join('');
+  renderPaginationUI(
+    'ordersPaginationInfo', 'ordersPrevBtn', 'ordersNextBtn', 'ordersPageNumbers',
+    totalItems, totalPages, currentOrdersPage,
+    (newPage) => { currentOrdersPage = newPage; renderAdminOrdersTable(); }
+  );
 }
 
 function handleAdminStatusChange(orderId, newStatus) {
@@ -393,31 +462,46 @@ function handleAdminStatusChange(orderId, newStatus) {
 }
 
 /* ============================================================
-   USER MANAGEMENT
+   USER MANAGEMENT (PAGINATED)
    ============================================================ */
 function renderAdminUsersTable() {
   const tbody = document.getElementById('adminUsersTbody');
   if (!tbody) return;
 
   const users = lsGet(LS_KEYS.USERS, []);
-  if (!users.length) {
+  const totalItems = users.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+  if (currentUsersPage > totalPages) currentUsersPage = totalPages;
+  if (currentUsersPage < 1) currentUsersPage = 1;
+
+  const start = (currentUsersPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginatedUsers = users.slice(start, end);
+
+  if (!paginatedUsers.length) {
     tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:24px;">No users found.</td></tr>`;
-    return;
+  } else {
+    tbody.innerHTML = paginatedUsers.map(u => {
+      const roleBadge = u.role === 'admin' || u.name === 'admin' || u.email === 'admin@angkormass.com'
+        ? '<span style="background:#e63946; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px;">Admin</span>'
+        : '<span style="background:#e0e0e0; color:#333; padding:2px 6px; border-radius:4px; font-size:12px;">User</span>';
+
+      return `
+        <tr>
+          <td><strong>${escapeHtml(u.name || 'User')}</strong></td>
+          <td>${escapeHtml(u.email || '')}</td>
+          <td>${roleBadge}</td>
+        </tr>
+      `;
+    }).join('');
   }
 
-  tbody.innerHTML = users.map(u => {
-    const roleBadge = u.role === 'admin' || u.name === 'admin' || u.email === 'admin@angkormass.com'
-      ? '<span style="background:#e63946; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px;">Admin</span>'
-      : '<span style="background:#e0e0e0; color:#333; padding:2px 6px; border-radius:4px; font-size:12px;">User</span>';
-
-    return `
-      <tr>
-        <td><strong>${escapeHtml(u.name || 'User')}</strong></td>
-        <td>${escapeHtml(u.email || '')}</td>
-        <td>${roleBadge}</td>
-      </tr>
-    `;
-  }).join('');
+  renderPaginationUI(
+    'usersPaginationInfo', 'usersPrevBtn', 'usersNextBtn', 'usersPageNumbers',
+    totalItems, totalPages, currentUsersPage,
+    (newPage) => { currentUsersPage = newPage; renderAdminUsersTable(); }
+  );
 }
 
 /* ---------- Document Ready Event ---------- */
