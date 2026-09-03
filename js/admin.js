@@ -252,14 +252,25 @@ function confirmDeleteProduct(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
-  if (confirm(`Are you sure you want to delete this product: "${product.model}"?`)) {
-    const updated = products.filter(p => p.id !== id);
-    lsSet(LS_KEYS.PRODUCTS, updated);
-    showToast('Product deleted.', 'success');
-    renderDashboardStats();
-    renderSalesStatistics();
-    renderAdminProductsTable();
-  }
+  // ជំនួស window.confirm ជាមួយ SweetAlert2 ដ៏ស្រស់ស្អាត
+  Swal.fire({
+    title: 'Are you sure?',
+    text: `You want to delete this product: "${product.model}"?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const updated = products.filter(p => p.id !== id);
+      lsSet(LS_KEYS.PRODUCTS, updated);
+      showToast('Product deleted.', 'success');
+      renderDashboardStats();
+      renderSalesStatistics();
+      renderAdminProductsTable();
+    }
+  });
 }
 
 /* ---------- Add / Edit Product Modal ---------- */
