@@ -1,13 +1,13 @@
 /* ============================================================
    admin.js — Admin Dashboard, CRUD, Sales Analytics & Orders
-   (with Pagination Support)
+   (with Pagination & Modal Fix)
    ============================================================ */
 
 /* ---------- Pagination State Config ---------- */
 let currentProductsPage = 1;
 let currentOrdersPage = 1;
 let currentUsersPage = 1;
-const itemsPerPage = 5; // Change number of items per page if needed
+const itemsPerPage = 5;
 
 /* ---------- Helper Fallbacks & Route Protection ---------- */
 function requireAdmin() {
@@ -31,9 +31,9 @@ function getMinStorageOption(product) {
 
 function getStockBadgeHtml(stock) {
   const num = Number(stock || 0);
-  if (num === 0) return '<span style="color:var(--danger,#e63946); font-weight:600;">Out of Stock</span>';
-  if (num <= 5) return '<span style="color:var(--warn,#ff9f1c); font-weight:600;">Low Stock</span>';
-  return '<span style="color:var(--good,#2ec4b6); font-weight:600;">In Stock</span>';
+  if (num === 0) return '<span style="color:var(--danger,#ef4444); font-weight:600;">Out of Stock</span>';
+  if (num <= 5) return '<span style="color:var(--warning,#f59e0b); font-weight:600;">Low Stock</span>';
+  return '<span style="color:var(--success,#10b981); font-weight:600;">In Stock</span>';
 }
 
 function restoreStock(productId, qty) {
@@ -196,7 +196,7 @@ function renderPaginationUI(infoId, prevBtnId, nextBtnId, numbersWrapId, totalIt
   let btnsHtml = '';
   for (let i = 1; i <= totalPages; i++) {
     const activeStyle = i === currentPage 
-      ? 'background:#1a1a1a; color:#fff;' 
+      ? 'background:var(--primary); color:#1f2937;' 
       : 'background:#f0f0f0; color:#333;';
     btnsHtml += `<button type="button" style="padding:5px 11px; border:none; border-radius:4px; cursor:pointer; font-weight:600; ${activeStyle}" onclick="(${onPageChange})(${i})">${i}</button>`;
   }
@@ -234,7 +234,7 @@ function renderAdminProductsTable() {
         <td>${getStockBadgeHtml(p.stock)}</td>
         <td>
           <button class="btn-sm" onclick="openProductModal('${p.id}')" style="background:#3a86ff; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Edit</button>
-          <button class="btn-sm btn-danger" onclick="confirmDeleteProduct('${p.id}')" style="background:#e63946; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
+          <button class="btn-sm btn-danger" onclick="confirmDeleteProduct('${p.id}')" style="background:#ef4444; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
         </td>
       </tr>
     `).join('');
@@ -374,12 +374,12 @@ function openProductModal(id) {
     document.getElementById('pfIsFeatured').checked = !!product.isFeatured;
   }
 
-  modal.style.display = 'flex';
+  modal.classList.add('open');
 }
 
 function closeProductModal() {
   const modal = document.getElementById('productFormModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) modal.classList.remove('open');
 }
 
 /* ============================================================
@@ -444,7 +444,6 @@ function handleAdminStatusChange(orderId, newStatus) {
 
   const items = order.items || order.products || [];
 
-  // Restore or decrease stock when switching to/from Cancelled
   if (isNowCancelled && !wasCancelled) {
     items.forEach(p => restoreStock(p.productId || p.id, p.quantity || p.qty || 1));
   } else if (!isNowCancelled && wasCancelled) {
@@ -484,8 +483,8 @@ function renderAdminUsersTable() {
   } else {
     tbody.innerHTML = paginatedUsers.map(u => {
       const roleBadge = u.role === 'admin' || u.name === 'admin' || u.email === 'admin@angkormass.com'
-        ? '<span style="background:#e63946; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px;">Admin</span>'
-        : '<span style="background:#e0e0e0; color:#333; padding:2px 6px; border-radius:4px; font-size:12px;">User</span>';
+        ? '<span style="background:#ef4444; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px;">Admin</span>'
+        : '<span style="background:#e2e8f0; color:#333; padding:2px 6px; border-radius:4px; font-size:12px;">User</span>';
 
       return `
         <tr>
