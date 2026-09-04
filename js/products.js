@@ -19,7 +19,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "https://i.pinimg.com/736x/9c/8d/de/9c8dde3df0d159f8fa0b1f245b997713.jpg",
+    image: "https://i.pinimg.com/736x/14/cf/e5/14cfe545ae577ffc415a4999d6c203ee.jpg",
     colors: ["Natural Titanium", "Black Titanium", "White Titanium"],
     storageOptions: [
       { size: "256GB", price: 1199, was: 1299 },
@@ -29,14 +29,14 @@ const INITIAL_PRODUCTS = [
   {
     id: "p102",
     brand: "Apple",
-    model: "iPhone 16 Pro",
+    model: "iPhone 17 Pro Max",
     category: "Smartphones",
     stock: 10,
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "https://i.pinimg.com/1200x/a0/a2/8f/a0a28ffa0e4b93d10b37b4d9b73eba14.jpg",
-    colors: ["Natural Titanium", "Desert Titanium"],
+    image: "https://i.pinimg.com/736x/8e/f8/be/8ef8bee4bb6f355520f78899ab23cc83.jpg",
+    colors: ["Natural Titanium", "Blue Titanium","Orange"],
     storageOptions: [
       { size: "128GB", price: 999, was: 1099 },
       { size: "256GB", price: 1099, was: 1199 }
