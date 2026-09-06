@@ -1,5 +1,5 @@
 /* ============================================================
-   products.js — Product Catalog, Stock Badges & Buy Now Popup
+   products.js — Product Catalog, Stock Badges & Product Options Popup
    ============================================================ */
 
 const PLACEHOLDER_IMG = 'https://placehold.co/400x400/f4f0e4/a9781e?text=No+Image';
@@ -325,7 +325,6 @@ function loadProducts() {
   const key = (typeof LS_KEYS !== 'undefined' && LS_KEYS.PRODUCTS) ? LS_KEYS.PRODUCTS : 'products_v2';
   const existing = typeof lsGet === 'function' ? lsGet(key, null) : null;
   
-  // Reload if no data, or if items aren't 20, or if old format exists
   if (!existing || existing.length !== INITIAL_PRODUCTS.length || (existing[0] && existing[0].id !== "p101")) {
     saveProducts(INITIAL_PRODUCTS);
     return INITIAL_PRODUCTS;
@@ -403,7 +402,6 @@ function getStockBadgeHtml(stock) {
 function buildProductCard(product) {
   const minOpt = getMinStorageOption(product);
   const outOfStock = product.stock <= 0;
-  const wished = typeof isInWishlist === 'function' && typeof isLoggedIn === 'function' && isLoggedIn() && isInWishlist(product.id);
   const escapeStr = str => (str ? String(str).replace(/"/g, '&quot;') : '');
   const fmtPrice = val => (typeof formatPrice === 'function' ? formatPrice(val) : '$' + val);
 
@@ -429,9 +427,6 @@ function buildProductCard(product) {
             Buy Now
           </button>
         </div>
-        <button class="btn-sm" style="width:100%; margin:8px 0 0; text-align:center;" data-action="toggle-wishlist" data-id="${product.id}">
-          ${wished ? '♥ In Wishlist' : '♡ Add to Wishlist'}
-        </button>
       </div>
     </div>
   `;
@@ -509,11 +504,11 @@ function renderHomeSections() {
 }
 
 /* ============================================================
-   BUY NOW POPUP / MODAL
+   PRODUCT OPTIONS POPUP (Used for both "Add to Cart" and "Buy Now")
    ============================================================ */
-function openBuyNowModal(productId) {
+function openOptionModal(productId, mode = 'cart') {
   if (typeof isLoggedIn === 'function' && !isLoggedIn()) {
-    if (typeof showToast === 'function') showToast('Please log in to purchase.', 'error');
+    if (typeof showToast === 'function') showToast('Please log in first.', 'error');
     setTimeout(() => { window.location.href = 'login.html'; }, 500);
     return;
   }
@@ -544,6 +539,7 @@ function openBuyNowModal(productId) {
 
   function renderModalContent() {
     const subtotal = selectedStorage.price * quantity;
+    const confirmBtnText = mode === 'buynow' ? 'Continue to Checkout' : 'Add to Cart';
 
     modal.innerHTML = `
       <div class="modal-card">
@@ -594,7 +590,7 @@ function openBuyNowModal(productId) {
 
         <div class="modal-footer">
           <button class="btn-cancel" id="cancelBuyModal">Cancel</button>
-          <button class="btn-confirm" id="confirmBuyModal">Continue to Checkout</button>
+          <button class="btn-confirm" id="confirmBuyModal">${confirmBtnText}</button>
         </div>
       </div>
     `;
@@ -614,7 +610,7 @@ function openBuyNowModal(productId) {
     document.getElementById('qtyPlus').onclick = () => { if (quantity < product.stock) { quantity++; renderModalContent(); } };
 
     document.getElementById('confirmBuyModal').onclick = () => {
-      const buyNowPayload = {
+      const payload = {
         productId: product.id,
         brand: product.brand,
         model: product.model,
@@ -625,13 +621,25 @@ function openBuyNowModal(productId) {
         qty: quantity
       };
 
-      if (typeof lsSet === 'function') {
-        lsSet('buyNowItem', buyNowPayload);
+      if (mode === 'buynow') {
+        if (typeof lsSet === 'function') {
+          lsSet('buyNowItem', payload);
+        } else {
+          localStorage.setItem('buyNowItem', JSON.stringify(payload));
+        }
+        modal.classList.remove('open');
+        window.location.href = 'checkout.html?mode=buynow';
       } else {
-        localStorage.setItem('buyNowItem', JSON.stringify(buyNowPayload));
+        if (typeof addToCart === 'function') {
+          addToCart(payload);
+        }
+        modal.classList.remove('open');
+        if (typeof openCartDrawer === 'function') {
+          openCartDrawer();
+        } else if (typeof openCartSidebar === 'function') {
+          openCartSidebar();
+        }
       }
-      modal.classList.remove('open');
-      window.location.href = 'checkout.html?mode=buynow';
     };
   }
 
@@ -648,33 +656,11 @@ document.addEventListener('click', function (e) {
   const productId = btn.dataset.id;
 
   if (action === 'buy-now') {
-    openBuyNowModal(productId);
+    openOptionModal(productId, 'buynow');
   }
 
   if (action === 'add-cart') {
-    const product = getProductById(productId);
-    const minOpt = getMinStorageOption(product);
-    if (typeof addToCart === 'function') {
-      addToCart({
-        productId: product.id,
-        brand: product.brand,
-        model: product.model,
-        image: product.image,
-        color: (product.colors && product.colors[0]) || 'Default',
-        storage: minOpt.size,
-        price: minOpt.price,
-        qty: 1
-      });
-    }
-  }
-
-  if (action === 'toggle-wishlist') {
-    if (typeof toggleWishlistItem === 'function') {
-      toggleWishlistItem(productId);
-      if (document.getElementById('productGrid') || document.getElementById('products-grid')) refreshCatalog();
-      if (document.getElementById('wishlistGrid') && typeof renderWishlistPage === 'function') renderWishlistPage();
-      if (document.getElementById('featuredGrid')) renderHomeSections();
-    }
+    openOptionModal(productId, 'cart');
   }
 });
 
