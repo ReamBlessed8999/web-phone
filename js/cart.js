@@ -173,7 +173,7 @@ function renderCartSidebar() {
   const safeEscapeHtml = typeof escapeHtml === 'function' ? escapeHtml : (str) => str || '';
 
   if (!cart.length) {
-    body.innerHTML = `<div class="empty-state"><span class="emoji">🛒</span>Your cart is empty.</div>`;
+    body.innerHTML = `<div class="empty-state"><span class="emoji"></span>Your cart is empty.</div>`;
     footer.innerHTML = '';
     return;
   }
