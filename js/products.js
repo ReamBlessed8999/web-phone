@@ -548,7 +548,6 @@ function openOptionModal(productId, mode = 'cart') {
           <img src="${product.image || PLACEHOLDER_IMG}" onerror="this.src='${PLACEHOLDER_IMG}'">
           <div>
             <h3>${product.brand} ${product.model}</h3>
-            ${getStockBadgeHtml(product.stock)}
           </div>
         </div>
 
