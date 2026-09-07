@@ -1,6 +1,5 @@
 /* ============================================================
-   admin.js — Admin Dashboard, CRUD, Sales Analytics & Orders
-   (with Pagination, Date in Orders & User Delete)
+   admin.js — Admin Dashboard, CRUD, Sales Analytics, Orders & Search-to-Scroll
    ============================================================ */
 
 /* ---------- Pagination State Config ---------- */
@@ -318,7 +317,9 @@ function confirmDeleteProduct(id) {
   });
 }
 
-/* ---------- Add / Edit Product Modal ---------- */
+/* ============================================================
+   ADD / EDIT PRODUCT MODAL
+   ============================================================ */
 function initProductModal() {
   const addBtn = document.getElementById('addProductBtn');
   if (addBtn) addBtn.addEventListener('click', () => openProductModal(null));
@@ -466,7 +467,6 @@ function renderAdminOrdersTable() {
       const itemsHtml = items.map(p => `${escapeHtml(p.model || p.name || 'Item')} × ${p.quantity || p.qty || 1}`).join('<br>');
       const currentStatus = o.status || 'Pending';
 
-      // Format order date & time
       let formattedDate = 'N/A';
       const rawDate = o.createdAt || o.date;
 
@@ -612,9 +612,64 @@ function confirmDeleteUser(userIdOrEmail) {
   });
 }
 
+/* ============================================================
+   FRONTEND SEARCH-TO-SCROLL LOGIC (INTEGRATED)
+   ============================================================ */
+function initSearchToScroll() {
+  const searchInput = document.getElementById('searchInput');
+  if (!searchInput) return;
+
+  searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const keyword = searchInput.value.toLowerCase().trim();
+      if (!keyword) return;
+
+      const productGrids = document.querySelectorAll('#productGrid, #featuredGrid, #popularGrid, #newGrid, #offersGrid');
+      let targetElement = null;
+      let found = false;
+
+      productGrids.forEach(grid => {
+        if (found) return;
+        const cards = grid.children;
+        for (let card of cards) {
+          const title = card.querySelector('h3, h4, .product-title, span');
+          if (title && title.textContent.toLowerCase().includes(keyword)) {
+            targetElement = card;
+            found = true;
+            break;
+          }
+        }
+      });
+
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        targetElement.style.transition = 'all 0.3s ease';
+        targetElement.style.boxShadow = '0 0 0 4px #d4af37';
+
+        setTimeout(() => {
+          targetElement.style.boxShadow = '';
+        }, 2000);
+      } else {
+        if (typeof showToast === 'function') {
+          showToast('Product not found!', 'error');
+        } else {
+          alert('រកមិនឃើញផលិតផលដែលអ្នកកំពុងស្វែងរកទេ!');
+        }
+      }
+    }
+  });
+}
+
 /* ---------- Document Ready Event ---------- */
 document.addEventListener('DOMContentLoaded', function () {
   if (document.getElementById('adminMainWrap')) {
     initAdminPage();
   }
+  // Initialize search-to-scroll feature globally if search input exists
+  initSearchToScroll();
 });
