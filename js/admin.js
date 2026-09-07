@@ -1,6 +1,6 @@
 /* ============================================================
    admin.js — Admin Dashboard, CRUD, Sales Analytics & Orders
-   (with Pagination & Modal Fix)
+   (with Pagination, Date in Orders & User Delete)
    ============================================================ */
 
 /* ---------- Pagination State Config ---------- */
@@ -439,7 +439,7 @@ function closeProductModal() {
 }
 
 /* ============================================================
-   ADMIN ORDER MANAGEMENT & STATUS UPDATE (PAGINATED)
+   ADMIN ORDER MANAGEMENT & STATUS UPDATE (PAGINATED WITH DATE)
    ============================================================ */
 function renderAdminOrdersTable() {
   const tbody = document.getElementById('adminOrdersTbody');
@@ -457,7 +457,7 @@ function renderAdminOrdersTable() {
   const paginatedOrders = orders.slice(start, end);
 
   if (!paginatedOrders.length) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">No orders yet.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px;">No orders yet.</td></tr>`;
   } else {
     const ORDER_STATUSES = ['Pending', 'Completed', 'Cancelled'];
 
@@ -466,9 +466,28 @@ function renderAdminOrdersTable() {
       const itemsHtml = items.map(p => `${escapeHtml(p.model || p.name || 'Item')} × ${p.quantity || p.qty || 1}`).join('<br>');
       const currentStatus = o.status || 'Pending';
 
+      // Format order date & time
+      let formattedDate = 'N/A';
+      const rawDate = o.createdAt || o.date;
+
+      if (rawDate) {
+        const dateObj = new Date(isNaN(rawDate) ? rawDate : Number(rawDate));
+        if (!isNaN(dateObj.getTime())) {
+          formattedDate = dateObj.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+          });
+        }
+      }
+
       return `
         <tr>
           <td>#${escapeHtml(o.id || '')}</td>
+          <td>${formattedDate}</td>
           <td>${escapeHtml(o.customerName || o.userEmail || 'Guest')}</td>
           <td>${itemsHtml || 'No items'}</td>
           <td>${escapeHtml(o.paymentMethod || 'COD')}</td>
@@ -517,7 +536,7 @@ function handleAdminStatusChange(orderId, newStatus) {
 }
 
 /* ============================================================
-   USER MANAGEMENT (PAGINATED)
+   USER MANAGEMENT (PAGINATED WITH DELETE USER)
    ============================================================ */
 function renderAdminUsersTable() {
   const tbody = document.getElementById('adminUsersTbody');
@@ -535,18 +554,28 @@ function renderAdminUsersTable() {
   const paginatedUsers = users.slice(start, end);
 
   if (!paginatedUsers.length) {
-    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:24px;">No users found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:24px;">No users found.</td></tr>`;
   } else {
-    tbody.innerHTML = paginatedUsers.map(u => {
-      const roleBadge = u.role === 'admin' || u.name === 'admin' || u.email === 'admin@angkormass.com'
+    tbody.innerHTML = paginatedUsers.map((u) => {
+      const isAdmin = u.role === 'admin' || u.name === 'admin' || u.email === 'admin@angkormass.com';
+      const roleBadge = isAdmin
         ? '<span style="background:#ef4444; color:#fff; padding:2px 6px; border-radius:4px; font-size:12px;">Admin</span>'
         : '<span style="background:#e2e8f0; color:#333; padding:2px 6px; border-radius:4px; font-size:12px;">User</span>';
+
+      const userId = u.id || u.email;
 
       return `
         <tr>
           <td><strong>${escapeHtml(u.name || 'User')}</strong></td>
           <td>${escapeHtml(u.email || '')}</td>
           <td>${roleBadge}</td>
+          <td>
+            ${!isAdmin ? `
+              <button class="btn-sm btn-danger" onclick="confirmDeleteUser('${escapeHtml(userId)}')" style="background:#ef4444; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
+            ` : `
+              <span style="color:#aaa; font-size:12px; font-style:italic;">Protected</span>
+            `}
+          </td>
         </tr>
       `;
     }).join('');
@@ -557,6 +586,30 @@ function renderAdminUsersTable() {
     totalItems, totalPages, currentUsersPage,
     (newPage) => { currentUsersPage = newPage; renderAdminUsersTable(); }
   );
+}
+
+function confirmDeleteUser(userIdOrEmail) {
+  const users = lsGet(LS_KEYS.USERS, []);
+  const user = users.find(u => (u.id && u.id === userIdOrEmail) || u.email === userIdOrEmail);
+  if (!user) return;
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: `You want to delete user: "${user.name || user.email}"?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: 'Yes, delete user!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const updatedUsers = users.filter(u => !((u.id && u.id === userIdOrEmail) || u.email === userIdOrEmail));
+      lsSet(LS_KEYS.USERS, updatedUsers);
+      showToast('User deleted successfully.', 'success');
+      renderDashboardStats();
+      renderAdminUsersTable();
+    }
+  });
 }
 
 /* ---------- Document Ready Event ---------- */
