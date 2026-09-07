@@ -421,7 +421,7 @@ function buildProductCard(product) {
       <div class="img-wrap">
         ${product.isNew ? `<span class="badge-tag">New</span>` : ''}
         ${getStockBadgeHtml(product.stock)}
-        <img src="${product.image || PLACEHOLDER_IMG}" alt="${escapeStr(product.model)}" onerror="this.src='${PLACEHOLDER_IMG}'">
+        <img height="180px" src="${product.image || PLACEHOLDER_IMG}" alt="${escapeStr(product.model)}" onerror="this.src='${PLACEHOLDER_IMG}'">
       </div>
       <div class="product-info">
         <span class="brand-title">${escapeStr(product.brand)}</span>
