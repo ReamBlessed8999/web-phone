@@ -383,6 +383,17 @@ function restoreStock(productId, qty) {
   }
 }
 
+/* ---------- Function សម្រាប់ Admin ថែមស្តុក ---------- */
+function addStock(productId, qty) {
+  const p = getProductById(productId);
+  if (p) {
+    p.stock = (parseInt(p.stock) || 0) + parseInt(qty);
+    updateProduct(productId, { stock: p.stock });
+    return p.stock;
+  }
+  return 0;
+}
+
 function getMinStorageOption(product) {
   if (!product.storageOptions || !product.storageOptions.length) {
     return { size: '-', price: product.price || 0, was: product.was || product.price || 0 };
@@ -456,7 +467,7 @@ function refreshCatalog() {
   }
 
   if (!products.length) {
-    grid.innerHTML = `<div class="no-result">😕 No products found matching your search.</div>`;
+    grid.innerHTML = `<div class="no-result"> No products found matching your search.</div>`;
     return;
   }
 
@@ -660,6 +671,33 @@ document.addEventListener('click', function (e) {
 
   if (action === 'add-cart') {
     openOptionModal(productId, 'cart');
+  }
+
+  // ទទួល Event សម្រាប់ការចុចប៊ូតុង add-stock ក្នុង Admin
+  if (action === 'add-stock') {
+    const product = getProductById(productId);
+    if (!product) return;
+
+    const inputQty = prompt(`បន្ថែមចំនួនស្តុកសម្រាប់: ${product.brand} ${product.model}\nបញ្ចូលចំនួន:`, "10");
+    if (inputQty !== null) {
+      const qtyToAdd = parseInt(inputQty, 10);
+      if (!isNaN(qtyToAdd) && qtyToAdd > 0) {
+        const newStock = addStock(productId, qtyToAdd);
+        if (typeof showToast === 'function') {
+          showToast(`បានបន្ថែមស្តុកជោគជ័យ! ស្តុកសរុប: ${newStock}`, 'success');
+        } else {
+          alert(`បានបន្ថែមស្តុកជោគជ័យ! ស្តុកសរុប: ${newStock}`);
+        }
+        // Refresh ទំព័រ Admin ឬ Render តារាងឡើងវិញ
+        if (typeof renderAdminProducts === 'function') {
+          renderAdminProducts();
+        } else {
+          location.reload();
+        }
+      } else {
+        alert('សូមបញ្ចូលចំនួនជាលេខដែលមានតម្លៃធំជាង 0!');
+      }
+    }
   }
 });
 

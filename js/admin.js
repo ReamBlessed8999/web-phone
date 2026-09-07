@@ -54,6 +54,51 @@ function decreaseStock(productId, qty) {
   }
 }
 
+/* ---------- Admin Add Stock Function ---------- */
+function addAdminStock(productId, qty) {
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
+  const idx = products.findIndex(p => p.id === productId);
+  if (idx !== -1) {
+    const currentStock = Number(products[idx].stock || 0);
+    const newStock = currentStock + Number(qty);
+    products[idx].stock = newStock;
+    lsSet(LS_KEYS.PRODUCTS, products);
+    return newStock;
+  }
+  return 0;
+}
+
+/* ---------- Prompt Add Stock Action ---------- */
+function promptAddStock(productId) {
+  const products = lsGet(LS_KEYS.PRODUCTS, []);
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+
+  Swal.fire({
+    title: `Add Stock: ${product.brand} ${product.model}`,
+    input: 'number',
+    inputLabel: 'Enter quantity to add:',
+    inputValue: 10,
+    showCancelButton: true,
+    confirmButtonText: 'Add Stock',
+    confirmButtonColor: '#10b981',
+    inputValidator: (value) => {
+      if (!value || isNaN(value) || parseInt(value) <= 0) {
+        return 'Please enter a valid positive number!';
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const qtyToAdd = parseInt(result.value);
+      const updatedStock = addAdminStock(productId, qtyToAdd);
+      showToast(`Stock updated! Total stock: ${updatedStock}`, 'success');
+      
+      renderDashboardStats();
+      renderAdminProductsTable();
+    }
+  });
+}
+
 /* ---------- Main Admin Init ---------- */
 function initAdminPage() {
   if (!requireAdmin()) return;
@@ -230,9 +275,10 @@ function renderAdminProductsTable() {
         <td><strong>${escapeHtml(p.brand)}</strong></td>
         <td>${escapeHtml(p.model)}</td>
         <td>${formatPrice(getMinStorageOption(p).price)}</td>
-        <td>${p.stock}</td>
+        <td><strong>${p.stock}</strong></td>
         <td>${getStockBadgeHtml(p.stock)}</td>
         <td>
+          <button class="btn-sm" onclick="promptAddStock('${p.id}')" style="background:#10b981; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:600;">+ Stock</button>
           <button class="btn-sm" onclick="openProductModal('${p.id}')" style="background:#3a86ff; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Edit</button>
           <button class="btn-sm btn-danger" onclick="confirmDeleteProduct('${p.id}')" style="background:#ef4444; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
         </td>
@@ -252,7 +298,6 @@ function confirmDeleteProduct(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
-  // ជំនួស window.confirm ជាមួយ SweetAlert2 ដ៏ស្រស់ស្អាត
   Swal.fire({
     title: 'Are you sure?',
     text: `You want to delete this product: "${product.model}"?`,
