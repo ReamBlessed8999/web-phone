@@ -426,6 +426,10 @@ function buildProductCard(product) {
       <div class="product-info">
         <span class="brand-title">${escapeStr(product.brand)}</span>
         <h3 class="product-name">${escapeStr(product.model)}</h3>
+        
+        <!-- ចំណងជើងរង (Subtitle/Variants) នៅចន្លោះឈ្មោះម៉ូដែល និងតម្លៃ -->
+        <div class="product-subtitle-item">${minOpt.size} • ${product.colors && product.colors[0] ? product.colors[0] : 'Standard'}</div>
+
         <div class="price-row">
           <span class="price-now">${fmtPrice(minOpt.price)}</span>
           ${minOpt.was > minOpt.price ? `<span class="price-was">${fmtPrice(minOpt.was)}</span>` : ''}
@@ -673,7 +677,6 @@ document.addEventListener('click', function (e) {
     openOptionModal(productId, 'cart');
   }
 
-  // ទទួល Event សម្រាប់ការចុចប៊ូតុង add-stock ក្នុង Admin
   if (action === 'add-stock') {
     const product = getProductById(productId);
     if (!product) return;
@@ -688,7 +691,6 @@ document.addEventListener('click', function (e) {
         } else {
           alert(`បានបន្ថែមស្តុកជោគជ័យ! ស្តុកសរុប: ${newStock}`);
         }
-        // Refresh ទំព័រ Admin ឬ Render តារាងឡើងវិញ
         if (typeof renderAdminProducts === 'function') {
           renderAdminProducts();
         } else {
