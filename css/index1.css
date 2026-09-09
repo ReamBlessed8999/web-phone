@@ -1,5 +1,88 @@
 @import url('style.css');
 
+/* ---------- Header & Nav Wrapper (Fixed Position Strategy) ---------- */
+
+body {
+  background-color: #bbbaee5d; /* ពណ៌ខៀវខ្ចីស្អាត (Light Blue) */
+  color: var(--text-main);
+  /* បើមានកូដ background ផ្សេងទៀត អាចជំនួសកន្លែងនេះបាន */
+}
+
+.site-header-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: var(--surface, #ffffff);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+header {
+  width: 100%;
+  background: transparent;
+}
+
+nav {
+  width: 100%;
+  background: transparent;
+  padding: 12px 28px;
+}
+
+/* ពង្រីកទំហំអក្សរក្នុង Menu ឱ្យងាយស្រួលចុច */
+nav a, nav .nav-link, nav ul li a {
+  font-size: 16px !important;
+  font-weight: 600;
+}
+
+/* រុញប្រអប់ Hero ឱ្យចុះមកក្រោមផុតពី Menu ទាំងស្រុង */
+main {
+  padding-top: 185px;
+}
+
+/* ពេលអូសចុះក្រោមឱ្យ Header និង Nav បាត់ខ្លួនឡើងលើព្រមគ្នា */
+body.hide-nav .site-header-wrapper {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Running Text Style ---------- */
+.running-text-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #2a2e39, #111827);
+  color: var(--primary, #d4af37);
+  padding: 12px 0;
+  border-radius: var(--radius-md, 8px);
+  margin-bottom: 30px;
+  box-shadow: var(--shadow-sm);
+}
+
+.running-text-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 25s linear infinite;
+}
+
+.running-text-track span {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 14.5px;
+  margin-right: 50px;
+  letter-spacing: 0.5px;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 /* ---------- Hero (Home page) ---------- */
 .hero {
   background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #3a2f14 100%);

@@ -19,7 +19,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "https://i.pinimg.com/736x/14/cf/e5/14cfe545ae577ffc415a4999d6c203ee.jpg",
+    image: "../image/iPhone16ProMax.webp",
     colors: ["Natural Titanium", "Black Titanium", "White Titanium"],
     storageOptions: [
       { size: "256GB", price: 1199, was: 1299 },
@@ -35,7 +35,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "https://i.pinimg.com/736x/8e/f8/be/8ef8bee4bb6f355520f78899ab23cc83.jpg",
+    image: "../image/iPhone17ProMax.webp",
     colors: ["Natural Titanium", "Blue Titanium","Orange"],
     storageOptions: [
       { size: "128GB", price: 999, was: 1099 },
@@ -51,7 +51,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.7,
-    image: "https://i.pinimg.com/1200x/74/9c/7f/749c7f31445b165258c4e491703c1b02.jpg",
+    image: "../image/iPhone16.webp",
     colors: ["Ultramarine", "Teal", "Pink"],
     storageOptions: [
       { size: "128GB", price: 799, was: 849 }
@@ -66,7 +66,7 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: true,
     rating: 4.8,
-    image: "https://i.pinimg.com/1200x/b4/17/57/b4175791e611cc3a44867c0e57bd67e0.jpg",
+    image: "../image/iPhone15ProMax.webp",
     colors: ["Natural Titanium", "Blue Titanium"],
     storageOptions: [
       { size: "256GB", price: 1099, was: 1199 }
@@ -81,7 +81,7 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.6,
-    image: "https://i.pinimg.com/736x/24/57/77/2457778e56d891f4b0cc73d498ae647a.jpg",
+    image: "../image/iPhone15.webp",
     colors: ["Pink", "Yellow", "Green", "Blue", "Black"],
     storageOptions: [
       { size: "128GB", price: 699, was: 799 }
@@ -98,7 +98,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "https://i.pinimg.com/736x/ce/c8/05/cec805810b06e68eaa3d3356e91a96cd.jpg",
+    image: "../image/GalaxyS24Ultra.webp",
     colors: ["Titanium Gray", "Titanium Black"],
     storageOptions: [
       { size: "256GB", price: 1299, was: 1399 }
@@ -113,7 +113,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.7,
-    image: "https://i.pinimg.com/736x/68/7e/a2/687ea2a1169c2a4410843fda1abc1e06.jpg",
+    image: "../image/GalaxyS24+.webp",
     colors: ["Onyx Black", "Marble Gray"],
     storageOptions: [
       { size: "256GB", price: 999, was: 1099 }
@@ -128,7 +128,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "https://i.pinimg.com/736x/a1/17/39/a11739febc2165d8586f4b761f7efa54.jpg",
+    image: "../image/GalaxyS24.webp",
     colors: ["Cobalt Violet", "Amber Yellow"],
     storageOptions: [
       { size: "128GB", price: 799, was: 849 }
@@ -143,7 +143,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "https://i.pinimg.com/736x/dc/7a/df/dc7adfab20b8d24c84b804f4fadee07f.jpg",
+    image: "../image/GalaxyZFold6.webp",
     colors: ["Navy", "Silver Shadow"],
     storageOptions: [
       { size: "256GB", price: 1799, was: 1899 }
@@ -158,7 +158,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.5,
-    image: "https://i.pinimg.com/1200x/f4/54/0a/f4540af19cef8f3f7e3b02717fe2df16.jpg",
+    image: "../image/Galaxy Z Flip 6.webp",
     colors: ["Blue", "Mint"],
     storageOptions: [
       { size: "256GB", price: 999, was: 1099 }

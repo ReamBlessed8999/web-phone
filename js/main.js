@@ -1,6 +1,6 @@
 /* ============================================================
    main.js — Search, Filter without auto-scroll, scroll on Search/Enter
-   + Smart Hide/Show Navbar on Scroll
+   + Smart Hide/Show Navbar on Scroll (Final Fixed)
    ============================================================ */
 
 function filterProductsOnly(query) {
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ============================================================
-   Smart Hide / Show Header & Nav on Scroll
+   Smart Hide / Show Header & Nav on Scroll (Final Fixed)
    ============================================================ */
 let lastScrollTop = 0;
 const delta = 5; 
@@ -122,11 +122,11 @@ window.addEventListener('scroll', function() {
 
   if (Math.abs(lastScrollTop - st) <= delta) return;
 
-  if (st > lastScrollTop && st > 100) {
+  if (st > lastScrollTop && st > 50) {
     // Scroll ចុះក្រោម ➔ លាក់ Header និង Nav ចោល
     document.body.classList.add('hide-nav');
-  } else {
-    // Scroll ឡើងលើ ➔ បង្ហាញ Header និង Nav មកវិញ
+  } else if (st < lastScrollTop) {
+    // Scroll ឡើងលើ ➔ បង្ហាញ Header និង Nav មកវិញភ្លាមៗ
     document.body.classList.remove('hide-nav');
   }
 
