@@ -19,7 +19,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "../image/iPhone16ProMax.webp",
+    image: "../image/16ProMax.webp",
     colors: ["Natural Titanium", "Black Titanium", "White Titanium"],
     storageOptions: [
       { size: "256GB", price: 1199, was: 1299 },
@@ -35,7 +35,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "../image/iPhone17ProMax.webp",
+    image: "../image/17ProMax.webp",
     colors: ["Natural Titanium", "Blue Titanium","Orange"],
     storageOptions: [
       { size: "128GB", price: 999, was: 1099 },
@@ -175,7 +175,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "https://i.pinimg.com/736x/a7/c8/62/a7c86211d969b80cabf391755b378c37.jpg",
+    image: "../image/FindX7Ultra.webp",
     colors: ["Ocean Blue", "Sepia Brown", "Tailored Black"],
     storageOptions: [
       { size: "256GB", price: 950, was: 1100 }
@@ -190,7 +190,7 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.7,
-    image: "https://i.pinimg.com/1200x/a2/ce/2c/a2ce2c071e9d6451929d37fa28fbf3b5.jpg",
+    image: "../image/FindN3Fold.webp",
     colors: ["Champagne Gold", "Classic Black"],
     storageOptions: [
       { size: "512GB", price: 1499, was: 1699 }
@@ -205,7 +205,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "https://i.pinimg.com/736x/06/16/8f/06168f862712bdd98e0a499cb0bb5493.jpg",
+    image: "../image/Reno12Pro.webp",
     colors: ["Nebula Silver", "Space Brown"],
     storageOptions: [
       { size: "256GB", price: 549, was: 599 }
@@ -220,7 +220,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.5,
-    image: "https://i.pinimg.com/1200x/2b/70/e5/2b70e553cc5a2645910f43d87adf8695.jpg",
+    image: "../image/Reno12.webp",
     colors: ["Astro Silver", "Matte Brown"],
     storageOptions: [
       { size: "256GB", price: 449, was: 499 }
@@ -235,7 +235,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.4,
-    image: "https://i.pinimg.com/736x/40/37/f4/4037f4af412a10b8b3b33e09966efa11.jpg",
+    image: "../image/A3Pro.webp",
     colors: ["Ocean Blue", "Mountain Blue"],
     storageOptions: [
       { size: "256GB", price: 299, was: 349 }
@@ -252,7 +252,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "https://i.pinimg.com/736x/f3/8c/45/f38c45f64a3698d8d72ed570800cf867.jpg",
+    image: "../image/Pura70Ultra.webp",
     colors: ["Chanson Green", "Mocha Brown", "Star Black"],
     storageOptions: [
       { size: "512GB", price: 1399, was: 1499 }
@@ -267,7 +267,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "https://i.pinimg.com/736x/1c/ef/5e/1cef5e55149e38f013cb0e651b473ac5.jpg",
+    image: "../image/Pura70Pro.webp",
     colors: ["Roland Purple", "Snow White", "Feather Black"],
     storageOptions: [
       { size: "512GB", price: 999, was: 1199 }
@@ -282,7 +282,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "https://i.pinimg.com/736x/9c/33/31/9c3331ab44dcf33ccb04b028e2075d88.jpg",
+    image: "../image/Pura70.webp",
     colors: ["Cherry Rose Pink", "Ice White", "Black"],
     storageOptions: [
       { size: "256GB", price: 799, was: 899 }
@@ -297,7 +297,7 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.7,
-    image: "https://i.pinimg.com/1200x/36/3f/65/363f65bbd90cc246c2c843e9e919452b.jpg",
+    image: "../image/MateX5Fold.webp",
     colors: ["Feather Red", "Feather White"],
     storageOptions: [
       { size: "512GB", price: 1799, was: 1999 }
@@ -312,7 +312,7 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.5,
-    image: "https://i.pinimg.com/736x/0c/be/a2/0cbea28ee5ebcbb05f5bae393ea7c714.jpg",
+    image: "../image/Nova12Pro.webp",
     colors: ["Color 11", "Obsidian Black"],
     storageOptions: [
       { size: "256GB", price: 549, was: 599 }

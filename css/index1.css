@@ -1,11 +1,10 @@
 @import url('style.css');
 
-/* ---------- Header & Nav Wrapper (Fixed Position Strategy) ---------- */
+/* ---------- Header & Nav Wrapper & Light Blue Background ---------- */
 
 body {
-  background-color: #bbbaee5d; /* ពណ៌ខៀវខ្ចីស្អាត (Light Blue) */
+  background: #ffffff !important;
   color: var(--text-main);
-  /* បើមានកូដ background ផ្សេងទៀត អាចជំនួសកន្លែងនេះបាន */
 }
 
 .site-header-wrapper {
@@ -36,6 +35,63 @@ nav a, nav .nav-link, nav ul li a {
   font-weight: 600;
 }
 
+/* ---------- ១. សម្រាប់ Store Logo ខាងលើ (អក្សរធំ ៣២ភីកសែល និងពណ៌ Blue RGB) ---------- */
+.site-header-wrapper .logo, 
+.site-header-wrapper .logo-kh, 
+.site-header-wrapper .brand-name-logo, 
+header .logo, 
+header .brand-name-logo,
+nav .logo {
+  text-transform: uppercase !important;
+  font-size: 32px !important;
+  font-weight: 900 !important;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb, #60a5fa) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: inline-block !important;
+  letter-spacing: 1.2px !important;
+}
+
+/* ---------- ២. សម្រាប់ Product Brand ក្រោមរូបភាពទំនិញ (ទំហំតូចល្មម ១៥ភីកសែល និងពណ៌ Blue RGB) ---------- */
+.product-card .brand-title,
+.product-info .brand-title,
+.product-brand {
+  text-transform: uppercase !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb, #60a5fa) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: inline-block !important;
+  margin-bottom: 2px !important;
+}
+
+/* ---------- ប្ដូរប៊ូតុង Search ទាំងអស់ឱ្យទៅជា Blue RGB Gradient ---------- */
+#searchBtn,
+button[type="submit"], 
+.search-btn, 
+.search-bar button, 
+form button,
+.input-group button {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb, #60a5fa) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 700;
+  transition: opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+#searchBtn:hover,
+button[type="submit"]:hover, 
+.search-btn:hover, 
+.search-bar button:hover, 
+form button:hover,
+.input-group button:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
 /* រុញប្រអប់ Hero ឱ្យចុះមកក្រោមផុតពី Menu ទាំងស្រុង */
 main {
   padding-top: 185px;
@@ -52,8 +108,8 @@ body.hide-nav .site-header-wrapper {
 .running-text-container {
   overflow: hidden;
   white-space: nowrap;
-  background: linear-gradient(135deg, #2a2e39, #111827);
-  color: var(--primary, #d4af37);
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: #60a5fa;
   padding: 12px 0;
   border-radius: var(--radius-md, 8px);
   margin-bottom: 30px;
@@ -85,7 +141,7 @@ body.hide-nav .site-header-wrapper {
 
 /* ---------- Hero (Home page) ---------- */
 .hero {
-  background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #3a2f14 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #172554 100%);
   border-radius: var(--radius-lg);
   color: #fff;
   padding: 64px 40px;
@@ -102,7 +158,10 @@ body.hide-nav .site-header-wrapper {
 
 .hero-eyebrow {
   display: inline-block;
-  color: var(--primary);
+  background: linear-gradient(135deg, #3b82f6, #93c5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 1.5px;
@@ -113,12 +172,13 @@ body.hide-nav .site-header-wrapper {
 .hero-text h1 { font-size: 42px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
 .hero-text p { color: #cbd5e1; font-size: 15.5px; line-height: 1.7; margin-bottom: 28px; }
 
+/* ---------- ប៊ូតុង Shop Now ប្តូរជា Blue RGB Gradient ---------- */
 .hero-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-  color: #1f2937;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb, #60a5fa);
+  color: #ffffff;
   font-weight: 700;
   padding: 14px 30px;
   border-radius: 999px;
@@ -126,10 +186,13 @@ body.hide-nav .site-header-wrapper {
   cursor: pointer;
   font-size: 15px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
 }
 
-.hero-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(212, 175, 55, 0.35); }
+.hero-btn:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.6); 
+}
 
 .hero-visual {
   font-size: 130px;
@@ -165,12 +228,12 @@ body.hide-nav .site-header-wrapper {
   box-shadow: var(--shadow-sm);
 }
 
-.brand-tile:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: var(--shadow-hover); }
+.brand-tile:hover { transform: translateY(-4px); border-color: #2563eb; box-shadow: var(--shadow-hover); }
 
 .brand-tile.active {
-  background: linear-gradient(135deg, #2a2e39, #111827);
+  background: linear-gradient(135deg, #1e293b, #0f172a);
   color: #ffffff;
-  border-color: #111827;
+  border-color: #0f172a;
 }
 
 /* ---------- Filter Chips ---------- */
@@ -187,9 +250,9 @@ body.hide-nav .site-header-wrapper {
   transition: all 0.15s ease;
 }
 
-.chip:hover, .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chip:hover, .chip.active { background: #2563eb; color: #fff; border-color: #2563eb; }
 
-/* ---------- Product Grid & Cards ---------- */
+/* ---------- Product Grid & Cards (ជាមួយ Black Shadow) ---------- */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -203,11 +266,16 @@ body.hide-nav .site-header-wrapper {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
-.product-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); border-color: rgba(212,175,55,0.4); }
+.product-card:hover { 
+  transform: translateY(-6px); 
+  border-color: rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.22);
+}
 
 .product-card .img-wrap {
   aspect-ratio: 1/1;
@@ -221,7 +289,7 @@ body.hide-nav .site-header-wrapper {
 }
 
 .product-card .img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.2s ease; }
-.product-card:hover .img-wrap img { transform: scale(1.05); }
+.product-card:hover .img-wrap img { transform: scale(1.02); }
 
 .badge-tag {
   position: absolute;
@@ -272,7 +340,6 @@ body.hide-nav .site-header-wrapper {
 .wishlist-heart.active { color: var(--danger); border-color: var(--danger); }
 
 .product-info { padding: 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.brand-title { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .product-name { font-size: 14.5px; font-weight: 700; color: var(--text-main); line-height: 1.35; min-height: 38px; margin: 0; }
 
 .option-group { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
@@ -292,7 +359,7 @@ body.hide-nav .site-header-wrapper {
 }
 
 .price-row { display: flex; align-items: baseline; gap: 8px; margin-top: auto; padding-top: 6px; }
-.price-now { color: var(--primary-dark); font-weight: 800; font-size: 18px; }
+.price-now { color: #2563eb; font-weight: 800; font-size: 18px; }
 .price-was { color: #b3b3b3; text-decoration: line-through; font-size: 13px; }
 
 .card-actions { display: flex; gap: 8px; margin-top: 10px; }
@@ -309,11 +376,13 @@ body.hide-nav .site-header-wrapper {
   cursor: pointer;
   transition: background 0.15s ease;
 }
-.add-cart-btn:hover, .add-cart:hover { background: var(--primary-dark); }
+.add-cart-btn:hover, .add-cart:hover { background: #1e293b; }
+
+/* ---------- ប៊ូតុង Buy Now ក្នុង Card ឱ្យទៅជា Blue RGB Gradient ---------- */
 .buy-now-btn {
   flex: 1;
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-  color: #1f2937;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb, #60a5fa);
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 700;
@@ -321,10 +390,11 @@ body.hide-nav .site-header-wrapper {
   padding: 10px;
   cursor: pointer;
   transition: opacity 0.15s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 .buy-now-btn:hover { opacity: 0.9; }
 .add-cart-btn:disabled, .buy-now-btn:disabled {
-  background: #e2e8f0; color: #94a3b8; cursor: not-allowed; opacity: 1;
+  background: #e2e8f0; color: #94a3b8; cursor: not-allowed; opacity: 1; box-shadow: none;
 }
 
 .no-result { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 15px; }
@@ -404,7 +474,7 @@ body.hide-nav .site-header-wrapper {
   display: flex; justify-content: space-between; align-items: center;
   padding-top: 14px; border-top: 1px dashed var(--border); font-size: 15px;
 }
-.subtotal-row strong { color: var(--primary-dark); font-size: 20px; }
+.subtotal-row strong { color: #2563eb; font-size: 20px; }
 
 .modal-footer { display: flex; gap: 12px; padding: 20px 24px; border-top: 1px solid var(--border); }
 .btn-cancel, .btn-confirm {
@@ -412,7 +482,13 @@ body.hide-nav .site-header-wrapper {
 }
 .btn-cancel { background: #f1f5f9; color: var(--text-main); }
 .btn-cancel:hover { background: #e2e8f0; }
-.btn-confirm { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #1f2937; }
+
+/* ---------- ប៊ូតុង Confirm ក្នុង Modal ឱ្យទៅជា Blue RGB Gradient ---------- */
+.btn-confirm { 
+  background: linear-gradient(135deg, #1e3a8a, #2563eb, #60a5fa); 
+  color: #ffffff; 
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
 .btn-confirm:hover { opacity: 0.92; }
 
 @media (max-width: 760px) {
