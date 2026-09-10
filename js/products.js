@@ -6,7 +6,7 @@ const PLACEHOLDER_IMG = 'https://placehold.co/400x400/f4f0e4/a9781e?text=No+Imag
 let catalogState = { query: '', category: 'All', brand: 'All' };
 
 /* ============================================================
-   DEFAULT PRODUCT CATALOG DATA (20 Smartphones)
+   DEFAULT PRODUCT CATALOG DATA (20 Smartphones with RAM)
    ============================================================ */
 const INITIAL_PRODUCTS = [
   // --- APPLE (5 Products) ---
@@ -19,11 +19,12 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "../image/16ProMax.webp",
-    colors: ["Natural Titanium", "Black Titanium", "White Titanium"],
+    image: "https://i.pinimg.com/1200x/2a/b7/fa/2ab7faefab2f3649315d56b088878107.jpg",
+    colors: ["White Titanium"],
+    ram: "8GB",
     storageOptions: [
-      { size: "256GB", price: 1199, was: 1299 },
-      { size: "512GB", price: 1399, was: 1499 }
+      { size: "256gb", price: 1199, was: 1299 },
+      { size: "512gb", price: 1399, was: 1499 }
     ]
   },
   {
@@ -35,11 +36,12 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "../image/17ProMax.webp",
+    image: "https://i.pinimg.com/1200x/d6/2f/83/d62f83562cef967616abcd0abf27a65c.jpg",
     colors: ["Natural Titanium", "Blue Titanium","Orange"],
+    ram: "12GB",
     storageOptions: [
-      { size: "128GB", price: 999, was: 1099 },
-      { size: "256GB", price: 1099, was: 1199 }
+      { size: "128gb", price: 999, was: 1099 },
+      { size: "256gb", price: 1099, was: 1199 }
     ]
   },
   {
@@ -51,10 +53,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.7,
-    image: "../image/iPhone16.webp",
+    image: "https://i.pinimg.com/736x/eb/4f/98/eb4f98895a760b453f03521b4d37ae93.jpg",
     colors: ["Ultramarine", "Teal", "Pink"],
+    ram: "8GB",
     storageOptions: [
-      { size: "128GB", price: 799, was: 849 }
+      { size: "128gb", price: 799, was: 849 }
     ]
   },
   {
@@ -66,10 +69,11 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: true,
     rating: 4.8,
-    image: "../image/iPhone15ProMax.webp",
-    colors: ["Natural Titanium", "Blue Titanium"],
+    image: "https://i.pinimg.com/1200x/2c/72/b1/2c72b1c676062281b5b013da3f6f58f0.jpg",
+    colors: ["Natural Light Blue"],
+    ram: "8GB",
     storageOptions: [
-      { size: "256GB", price: 1099, was: 1199 }
+      { size: "256gb", price: 1099, was: 1199 }
     ]
   },
   {
@@ -81,10 +85,11 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.6,
-    image: "../image/iPhone15.webp",
-    colors: ["Pink", "Yellow", "Green", "Blue", "Black"],
+    image: "https://i.pinimg.com/736x/1f/87/7e/1f877e034af513c07793f466855f3ef9.jpg",
+    colors: ["White Titanium"],
+    ram: "6GB",
     storageOptions: [
-      { size: "128GB", price: 699, was: 799 }
+      { size: "128gb", price: 699, was: 799 }
     ]
   },
 
@@ -98,10 +103,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "../image/GalaxyS24Ultra.webp",
-    colors: ["Titanium Gray", "Titanium Black"],
+    image: "https://i.pinimg.com/1200x/60/b0/95/60b095694e428537ca9386e58d6e6639.jpg",
+    colors: ["Titanium Silver"],
+    ram: "12GB",
     storageOptions: [
-      { size: "256GB", price: 1299, was: 1399 }
+      { size: "256gb", price: 1299, was: 1399 }
     ]
   },
   {
@@ -113,10 +119,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.7,
-    image: "../image/GalaxyS24+.webp",
-    colors: ["Onyx Black", "Marble Gray"],
+    image: "https://i.pinimg.com/736x/ac/d9/a6/acd9a6e15f1df93ae909fe34bdf33a09.jpg",
+    colors: ["Onyx White"],
+    ram: "12GB",
     storageOptions: [
-      { size: "256GB", price: 999, was: 1099 }
+      { size: "256gb", price: 999, was: 1099 }
     ]
   },
   {
@@ -128,10 +135,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "../image/GalaxyS24.webp",
+    image: "https://i.pinimg.com/736x/9b/89/7a/9b897a7f1f5a86acd17b82bb5b4be98d.jpg",
     colors: ["Cobalt Violet", "Amber Yellow"],
+    ram: "8GB",
     storageOptions: [
-      { size: "128GB", price: 799, was: 849 }
+      { size: "128gb", price: 799, was: 849 }
     ]
   },
   {
@@ -143,10 +151,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "../image/GalaxyZFold6.webp",
+    image: "https://i.pinimg.com/1200x/54/3b/a6/543ba64b03fee634da3541e19421304f.jpg",
     colors: ["Navy", "Silver Shadow"],
+    ram: "12GB",
     storageOptions: [
-      { size: "256GB", price: 1799, was: 1899 }
+      { size: "256gb", price: 1799, was: 1899 }
     ]
   },
   {
@@ -158,10 +167,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.5,
-    image: "../image/Galaxy Z Flip 6.webp",
+    image: "https://i.pinimg.com/1200x/5a/03/0b/5a030b1962a222aefec5be491fde5ecb.jpg",
     colors: ["Blue", "Mint"],
+    ram: "12GB",
     storageOptions: [
-      { size: "256GB", price: 999, was: 1099 }
+      { size: "256gb", price: 999, was: 1099 }
     ]
   },
 
@@ -175,10 +185,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "../image/FindX7Ultra.webp",
-    colors: ["Ocean Blue", "Sepia Brown", "Tailored Black"],
+    image: "https://i.pinimg.com/736x/3e/44/f9/3e44f9ef8f65ea8c127a7cdd7d2d432e.jpg",
+    colors: ["Sepia Brown"],
+    ram: "16GB",
     storageOptions: [
-      { size: "256GB", price: 950, was: 1100 }
+      { size: "256gb", price: 950, was: 1100 }
     ]
   },
   {
@@ -190,10 +201,11 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.7,
-    image: "../image/FindN3Fold.webp",
-    colors: ["Champagne Gold", "Classic Black"],
+    image: "https://i.pinimg.com/736x/46/6c/1a/466c1a7d3a716fe4f347b4c2de9c0f06.jpg",
+    colors: ["Champagne Purple"],
+    ram: "16GB",
     storageOptions: [
-      { size: "512GB", price: 1499, was: 1699 }
+      { size: "512gb", price: 1499, was: 1699 }
     ]
   },
   {
@@ -205,10 +217,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "../image/Reno12Pro.webp",
-    colors: ["Nebula Silver", "Space Brown"],
+    image: "https://i.pinimg.com/736x/01/03/94/01039471f4931a4fee4340d72b82569f.jpg",
+    colors: ["Space Light Blue"],
+    ram: "12GB",
     storageOptions: [
-      { size: "256GB", price: 549, was: 599 }
+      { size: "256gb", price: 549, was: 599 }
     ]
   },
   {
@@ -220,10 +233,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.5,
-    image: "../image/Reno12.webp",
-    colors: ["Astro Silver", "Matte Brown"],
+    image: "https://i.pinimg.com/736x/9c/06/11/9c0611b6631e16ab765365decf58cd51.jpg",
+    colors: ["Astro Red"],
+    ram: "12GB",
     storageOptions: [
-      { size: "256GB", price: 449, was: 499 }
+      { size: "256gb", price: 449, was: 499 }
     ]
   },
   {
@@ -235,10 +249,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.4,
-    image: "../image/A3Pro.webp",
-    colors: ["Ocean Blue", "Mountain Blue"],
+    image: "https://i.pinimg.com/1200x/35/e0/b7/35e0b7f182f1381028b9dfbf3a9ec820.jpg",
+    colors: ["Ocean Purple"],
+    ram: "8GB",
     storageOptions: [
-      { size: "256GB", price: 299, was: 349 }
+      { size: "256gb", price: 299, was: 349 }
     ]
   },
 
@@ -252,10 +267,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.9,
-    image: "../image/Pura70Ultra.webp",
-    colors: ["Chanson Green", "Mocha Brown", "Star Black"],
+    image: "https://i.pinimg.com/1200x/70/c0/7e/70c07ee1dafb722258a7da578a27fba9.jpg",
+    colors: ["Mocha Gray"],
+    ram: "16GB",
     storageOptions: [
-      { size: "512GB", price: 1399, was: 1499 }
+      { size: "512gb", price: 1399, was: 1499 }
     ]
   },
   {
@@ -267,10 +283,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    image: "../image/Pura70Pro.webp",
-    colors: ["Roland Purple", "Snow White", "Feather Black"],
+    image: "https://i.pinimg.com/736x/52/3e/52/523e5236b8ca839ce0751d4ef59c84fd.jpg",
+    colors: ["Natural Ranbow"],
+    ram: "12GB",
     storageOptions: [
-      { size: "512GB", price: 999, was: 1199 }
+      { size: "512gb", price: 999, was: 1199 }
     ]
   },
   {
@@ -282,10 +299,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.6,
-    image: "../image/Pura70.webp",
-    colors: ["Cherry Rose Pink", "Ice White", "Black"],
+    image: "https://i.pinimg.com/736x/b1/27/28/b12728b60cf5d9c84a75a215a37f4207.jpg",
+    colors: ["Ocean Blue"],
+    ram: "12GB",
     storageOptions: [
-      { size: "256GB", price: 799, was: 899 }
+      { size: "256gb", price: 799, was: 899 }
     ]
   },
   {
@@ -297,10 +315,11 @@ const INITIAL_PRODUCTS = [
     isNew: false,
     isFeatured: false,
     rating: 4.7,
-    image: "../image/MateX5Fold.webp",
-    colors: ["Feather Red", "Feather White"],
+    image: "https://i.pinimg.com/736x/f7/a8/08/f7a8088b976f566c00bac4be0d945919.jpg",
+    colors: ["Feather White"],
+    ram: "16GB",
     storageOptions: [
-      { size: "512GB", price: 1799, was: 1999 }
+      { size: "512gb", price: 1799, was: 1999 }
     ]
   },
   {
@@ -312,10 +331,11 @@ const INITIAL_PRODUCTS = [
     isNew: true,
     isFeatured: false,
     rating: 4.5,
-    image: "../image/Nova12Pro.webp",
-    colors: ["Color 11", "Obsidian Black"],
+    image: "https://i.pinimg.com/736x/5b/5f/9b/5b5f9b8fde99abcfeccc5f9226cc3f91.jpg",
+    colors: ["Obsidian Ice White"],
+    ram: "8GB",
     storageOptions: [
-      { size: "256GB", price: 549, was: 599 }
+      { size: "256gb", price: 549, was: 599 }
     ]
   }
 ];
@@ -396,7 +416,7 @@ function addStock(productId, qty) {
 
 function getMinStorageOption(product) {
   if (!product.storageOptions || !product.storageOptions.length) {
-    return { size: '-', price: product.price || 0, was: product.was || product.price || 0 };
+    return { size: '256gb', price: product.price || 0, was: product.was || product.price || 0 };
   }
   return product.storageOptions.reduce((min, o) => (o.price < min.price ? o : min), product.storageOptions[0]);
 }
@@ -425,12 +445,16 @@ function buildProductCard(product) {
       </div>
       <div class="product-info">
         <span class="brand-title">${escapeStr(product.brand)}</span>
-        <h3 class="product-name">${escapeStr(product.model)}</h3>
+        <h3 class="product-name" style="margin: 0 !important; padding: 0 !important;">${escapeStr(product.model)}</h3>
         
-        <!-- ចំណងជើងរង (Subtitle/Variants) នៅចន្លោះឈ្មោះម៉ូដែល និងតម្លៃ -->
-        <div class="product-subtitle-item">${minOpt.size} • ${product.colors && product.colors[0] ? product.colors[0] : 'Standard'}</div>
+        <!-- ទាញយកតម្លៃ Ram និង Storage តាមផលិតផលនីមួយៗដោយស្វ័យប្រវត្ត -->
+        <div class="product-specs" style="margin: -8px 0 0 0 !important; padding: 0 !important; font-size: 13px; line-height: 1.1;">
+          <div style="margin: 0; padding: 0;"><strong>Ram:</strong> ${product.ram || '8GB'}</div>
+          <div style="margin: 0; padding: 0;"><strong>Storage:</strong> ${minOpt.size}</div>
+          <div style="margin: 0; padding: 0;"><strong>Color:</strong> ${product.colors && product.colors[0] ? product.colors[0] : 'Standard'}</div>
+        </div>
 
-        <div class="price-row">
+        <div class="price-row" style="margin-top: 4px;">
           <span class="price-now">${fmtPrice(minOpt.price)}</span>
           ${minOpt.was > minOpt.price ? `<span class="price-was">${fmtPrice(minOpt.was)}</span>` : ''}
         </div>

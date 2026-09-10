@@ -1,9 +1,13 @@
+/* ============================================================
+   index1.css — Product Catalog Card Styles with Soft Blue Glow
+   ============================================================ */
+
 @import url('style.css');
 
 /* ---------- Header & Nav Wrapper & Light Blue Background ---------- */
 
 body {
-  background: #ffffff !important;
+  background: #feffff !important;
   color: var(--text-main);
 }
 
@@ -252,7 +256,7 @@ body.hide-nav .site-header-wrapper {
 
 .chip:hover, .chip.active { background: #2563eb; color: #fff; border-color: #2563eb; }
 
-/* ---------- Product Grid & Cards (ជាមួយ Black Shadow) ---------- */
+/* ---------- Product Grid & Cards (ជាមួយ Soft Blue Shadow ស្រដៀងក្នុងរូបភាព) ---------- */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -268,13 +272,13 @@ body.hide-nav .site-header-wrapper {
   flex-direction: column;
   transition: all 0.3s ease;
   position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 0px 5px 0px rgb(84, 111, 230);
 }
 
 .product-card:hover { 
   transform: translateY(-6px); 
-  border-color: rgba(0, 0, 0, 0.2); 
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.22);
+  border-color: rgba(115, 147, 248, 0.6); 
+  box-shadow: 0px 6px 0px 4px rgba(111, 136, 247, 0.8);
 }
 
 .product-card .img-wrap {
