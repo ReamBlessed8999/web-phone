@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@500;600;700&display=swap');
 
 :root {
-  --primary: #d4af37;           /* Metallic Gold */
-  --primary-dark: #b38f2a;
-  --bg-main: #f8fafc;           /* Clean Off-White */
+  --primary: #2563eb;          /* Blue RGB */
+  --primary-dark: #1e3a8a;     /* Deep Blue */
+  --bg-main: #f8fafc;          /* Clean Off-White */
   --surface: #ffffff;
-  --text-main: #0f172a;         /* Deep Navy / Slate */
+  --text-main: #0f172a;        /* Deep Navy / Slate */
   --text-muted: #64748b;
   --border: #e2e8f0;
-  --footer-bg: #0f172a;         /* Deep Slate Dark */
+  --footer-bg: #0f172a;        /* Deep Slate Dark */
   --success: #10b981;
   --danger: #ef4444;
 
-  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  --shadow-md: 0px 4px 20px 2px rgba(111, 136, 247, 0.4); /* Soft Blue Glow Shadow */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -85,13 +85,14 @@ header {
   font-size: 14px; outline: none; background: #fcfbf8; transition: all 0.2s ease; font-family: inherit;
 }
 .form-group input:focus {
-  border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+  border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .btn-primary {
   width: 100%; padding: 13px; background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-  color: #1f2937; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer;
+  color: #ffffff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer;
   transition: opacity 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 .btn-primary:hover { opacity: 0.94; transform: translateY(-1px); }
 
@@ -100,6 +101,10 @@ header {
 .auth-wrap {
   width: 100%; max-width: 400px; background: var(--surface); border: 1px solid var(--border);
   border-radius: 16px; padding: 32px 28px; box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+.auth-wrap:hover {
+  box-shadow: 0px 6px 0px 4px rgba(111, 136, 247, 0.8);
 }
 .auth-wrap h2 { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 6px; }
 .auth-subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
